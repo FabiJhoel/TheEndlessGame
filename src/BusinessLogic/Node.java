@@ -5,24 +5,22 @@ import java.util.ArrayList;
 public class Node {
 	
 	private int seed;
-	private int id;
+	private int intersectionNumb;
 	private int levelCounter;
 	private boolean visited;
 	private String name;
-	private int intersectionNumb;
 	private boolean isReturn;
 	private ArrayList<Node> arcs;
 	private static int numbOfNodes = 0;
+	private Billboard billboard;
 	
-	public Node(int pSeed, int pLevel, String pName, int pIntersectNumb){
+	public Node(int pSeed, int pLevel, String pName){
 		
 		seed = pSeed;
 		levelCounter = pLevel;
 		name = pName;
-		intersectionNumb = pIntersectNumb;
 		visited = false;
-		id = numbOfNodes ++;
-		
+		intersectionNumb = numbOfNodes ++;		
 	}
 
 	public int getSeed() {
@@ -31,14 +29,6 @@ public class Node {
 
 	public void setSeed(int seed) {
 		this.seed = seed;
-	}
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public int getLevelCounter() {
@@ -81,7 +71,17 @@ public class Node {
 		this.isReturn = isReturn;
 	}
 	
-	public ArrayList getArcs(){
+	public Billboard getBillboard()
+	{
+		return this.billboard;
+	}
+	
+	public void setBillboard(Billboard billboard)
+	{
+		this.billboard = billboard;
+	}
+	
+	public ArrayList<Node> getArcs(){
 		return arcs;
 	}
 	
@@ -95,12 +95,12 @@ public class Node {
 		
         for (int cont = 0; cont < arcs.size(); cont++) 
         {
-            if (pNode.id == arcs.get(cont).id)
+            if (pNode.intersectionNumb == arcs.get(cont).intersectionNumb)
                 return cont;
         }
         
         return -1;
-    }
+    }	
 	
 
 }

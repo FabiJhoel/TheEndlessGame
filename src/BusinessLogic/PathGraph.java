@@ -14,10 +14,6 @@ public class PathGraph {
 	public ArrayList<Node> getIntersections() {
 		return intersections;
 	}
-
-	public void setIntersections(ArrayList<Node> intersections) {
-		this.intersections = intersections;
-	}
 	
 	public void addIntersection(Node pNode){
 		
@@ -34,7 +30,7 @@ public class PathGraph {
 
         for (int cont = 0; cont < intersections.size(); cont++)
         {
-            if (intersections.get(cont).getId() == nodeID)
+            if (intersections.get(cont).getIntersectionNumb() == nodeID)
                 return intersections.get(cont);
         }
 
@@ -49,7 +45,7 @@ public class PathGraph {
             {
             	Node tempNode =  (Node) intersections.get(contNodes).getArcs().get(contArcs);
                 
-            	if ( tempNode.getId() == pIntersection.getId())
+            	if ( tempNode.getIntersectionNumb() == pIntersection.getIntersectionNumb())
                     intersections.get(contNodes).getArcs().remove(contArcs);
             }
         }
@@ -61,7 +57,7 @@ public class PathGraph {
     public void visitAdjacentNodes(Node pNode)
     {
         visitIntersection(pNode);
-        System.out.print(pNode.getId()+"  ");
+        System.out.print(pNode.getIntersectionNumb()+"  ");
 
         // for each arc
         for (int cont = 0; cont < pNode.getArcs().size(); cont++)
@@ -70,7 +66,7 @@ public class PathGraph {
             if (isNodeVisited((Node) pNode.getArcs().get(cont)) == false)
             {
             	Node tempNode = (Node) pNode.getArcs().get(cont);
-            	visitAdjacentNodes(findNode(tempNode.getId()));
+            	visitAdjacentNodes(findNode(tempNode.getIntersectionNumb()));
             }
         }
     }
@@ -78,7 +74,7 @@ public class PathGraph {
     public void visitIntersection(Node pNode)
     {
         for (int i = 0; i < intersections.size(); i++) {
-            if (pNode.getId() == intersections.get(i).getId())
+            if (pNode.getIntersectionNumb() == intersections.get(i).getIntersectionNumb())
             	intersections.get(i).setVisited(true);
         }
     }
@@ -86,12 +82,28 @@ public class PathGraph {
     public boolean isNodeVisited(Node pNode)
     {
         for (int i = 0; i < intersections.size(); i++) {
-            if (pNode.getId() == intersections.get(i).getId())
+            if (pNode.getIntersectionNumb() == intersections.get(i).getIntersectionNumb())
                 return intersections.get(i).getVisited();
         }
         
         // if is not visited
         return false;
+    }
+    
+    public void generateGraph()
+    {
+    	// create initial node
+    	int seed = (12* 3 + 5) % 7;
+    	addIntersection(new Node(seed, 1,""));
+    	
+    	for (int i= 0; i<12; i++)
+    	{
+    		seed = (seed * 3 + 5) % 7;
+            
+            System.out.println("IMPRIMIR: " + seed);
+  
+    	}
+    	
     }
 
 	
@@ -99,7 +111,7 @@ public class PathGraph {
     {
         for (int i = 0; i < intersections.size(); i++)
         {
-            System.out.print("Vertice "+intersections.get(i).getId()+":  ");
+            System.out.print("Vertice "+intersections.get(i).getIntersectionNumb()+":  ");
             
             for (int j = 0; j < intersections.get(i).getArcs().size(); j++) 
             {
