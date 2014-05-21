@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
         PathGraph pg = new PathGraph();
         
         pg.generateGraph();
+        pg.graphToString ();
         
         
     }

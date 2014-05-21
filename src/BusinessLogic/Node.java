@@ -6,18 +6,19 @@ public class Node {
 	
 	private int seed;
 	private int intersectionNumb;
-	private int levelCounter;
+	private int level;
 	private boolean visited;
 	private String name;
 	private boolean isReturn;
-	private ArrayList<Node> arcs;
+	private ArrayList<Node> previousArcs = new ArrayList<Node>();
+	private ArrayList<Node> nextArcs = new ArrayList<Node>();
 	private static int numbOfNodes = 0;
 	private Billboard billboard;
 	
 	public Node(int pSeed, int pLevel, String pName){
 		
 		seed = pSeed;
-		levelCounter = pLevel;
+		level = pLevel;
 		name = pName;
 		visited = false;
 		intersectionNumb = numbOfNodes ++;		
@@ -31,12 +32,12 @@ public class Node {
 		this.seed = seed;
 	}
 
-	public int getLevelCounter() {
-		return levelCounter;
+	public int getLevel() {
+		return level;
 	}
 
-	public void setLevelCounter(int levelCounter) {
-		this.levelCounter = levelCounter;
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public boolean getVisited() {
@@ -81,21 +82,31 @@ public class Node {
 		this.billboard = billboard;
 	}
 	
-	public ArrayList<Node> getArcs(){
-		return arcs;
+	public ArrayList<Node> getPreviousArcs(){
+		return previousArcs;
 	}
 	
-	public void addArc(Node arc){
+	public void addPreviousArc(Node previousArc){
 		
-		if (findArc(arc) == -1)
-			arcs.add(arc);
+		if (findArc(previousArc) == -1)
+			previousArcs.add(previousArc);
 	}
 	
+	public ArrayList<Node> getNextArcs() {
+		return nextArcs;
+	}
+
+	public void addNextArcs(Node nextArc) {
+		
+		if (findArc(nextArc) == -1)
+			nextArcs.add(nextArc);
+	}
+
 	public int findArc(Node pNode){
 		
-        for (int cont = 0; cont < arcs.size(); cont++) 
+        for (int cont = 0; cont < previousArcs.size(); cont++) 
         {
-            if (pNode.intersectionNumb == arcs.get(cont).intersectionNumb)
+            if (pNode.intersectionNumb == previousArcs.get(cont).intersectionNumb)
                 return cont;
         }
         
