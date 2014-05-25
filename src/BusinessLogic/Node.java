@@ -1,34 +1,33 @@
 package BusinessLogic;
 
 import java.util.ArrayList;
+import java.math.BigInteger;
 
 public class Node {
 	
-	private int seed;
-	private int intersectionNumb;
+	private BigInteger seed; // intersection number
 	private int level;
 	private boolean visited;
 	private String name;
 	private boolean isReturn;
-	private ArrayList<Node> previousArcs = new ArrayList<Node>();
+	private Node parentArc;
 	private ArrayList<Node> nextArcs = new ArrayList<Node>();
-	private static int numbOfNodes = 0;
 	private Billboard billboard;
+	private SeedOperator seedOp = SeedOperator.getInstance();
 	
-	public Node(int pSeed, int pLevel, String pName){
+	public Node(BigInteger pSeed, int pLevel, String pName){
 		
 		seed = pSeed;
 		level = pLevel;
 		name = pName;
 		visited = false;
-		intersectionNumb = numbOfNodes ++;		
 	}
 
-	public int getSeed() {
+	public BigInteger getSeed() {
 		return seed;
 	}
 
-	public void setSeed(int seed) {
+	public void setSeed(BigInteger seed) {
 		this.seed = seed;
 	}
 
@@ -56,14 +55,6 @@ public class Node {
 		this.name = name;
 	}
 
-	public int getIntersectionNumb() {
-		return intersectionNumb;
-	}
-
-	public void setIntersectionNumb(int intersectionNumb) {
-		this.intersectionNumb = intersectionNumb;
-	}
-
 	public boolean getIsReturn() {
 		return isReturn;
 	}
@@ -82,21 +73,21 @@ public class Node {
 		this.billboard = billboard;
 	}
 	
-	public ArrayList<Node> getPreviousArcs(){
-		return previousArcs;
+	public Node getParentArc(){
+		
+		return parentArc;
 	}
 	
-	public void addPreviousArc(Node previousArc){
+	public void setParentArc(Node previousArc){
 		
-		if (findArc(previousArc) == -1)
-			previousArcs.add(previousArc);
+		parentArc = previousArc;
 	}
 	
 	public ArrayList<Node> getNextArcs() {
 		return nextArcs;
 	}
 
-	public void addNextArcs(Node nextArc) {
+	public void addNextArc(Node nextArc) {
 		
 		if (findArc(nextArc) == -1)
 			nextArcs.add(nextArc);
@@ -104,14 +95,44 @@ public class Node {
 
 	public int findArc(Node pNode){
 		
-        for (int cont = 0; cont < previousArcs.size(); cont++) 
+        for (int cont = 0; cont < nextArcs.size(); cont++) 
         {
-            if (pNode.intersectionNumb == previousArcs.get(cont).intersectionNumb)
+            if (pNode.seed == nextArcs.get(cont).seed)
                 return cont;
         }
         
         return -1;
     }	
+	
+	 public int assignLevel(int parentLevel)
+    {
+    	int level = parentLevel + 1;
+    	
+    	if (level <= 4)
+    		return level;
+    	
+    	else
+    		return 1;
+    }
+	
+	public void generateAdjacents()
+	{
+		int numbOfChildren = seedOp.getNumbOfNextIntersections();
+		BigInteger childrenSeed = seedOp.getNewSeed();
+		
+		System.out.println("PADRE #" + seed + " Nivel: " + level);
+		
+		for (int contChildren = 0; contChildren < numbOfChildren; contChildren++)
+		{		
+			addNextArc(new Node(childrenSeed, assignLevel(level), ""));
+			childrenSeed = seedOp.getNewSeed();
+		}
+		
+		for (Node c : getNextArcs())
+		{
+			System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());
+		}
+	}
 	
 
 }

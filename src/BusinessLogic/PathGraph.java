@@ -1,10 +1,12 @@
 package BusinessLogic;
 
 import java.util.ArrayList;
+import java.math.BigInteger;
 
 public class PathGraph {
 	
 	private ArrayList<Node> intersections;
+	private ArrayList <Node> currentParents = new ArrayList<Node>();
 
 	public PathGraph()
     {
@@ -19,18 +21,12 @@ public class PathGraph {
 		
 		intersections.add(pNode);
 	}
-	
-	/*public void addArc(Node origin, Node destination){
-		
-		if (origin != null && destination != null)
-			origin.addArc(destination);
-	}*/
-	
-	public Node findNode (int nodeID){
+
+	public Node findNode (BigInteger nodeID){
 
         for (int cont = 0; cont < intersections.size(); cont++)
         {
-            if (intersections.get(cont).getIntersectionNumb() == nodeID)
+            if (intersections.get(cont).getSeed() == nodeID)
                 return intersections.get(cont);
         }
 
@@ -39,17 +35,19 @@ public class PathGraph {
 	
 	public void removeNode (Node pIntersection)
     {
+		// Remove arcs that contain this Node
         for (int contNodes = 0; contNodes < intersections.size(); contNodes++)
         {
-            for (int contArcs = 0; contArcs < intersections.get(contNodes).getPreviousArcs().size(); contArcs++) 
+            for (int contArcs = 0; contArcs < intersections.get(contNodes).getNextArcs().size(); contArcs++) 
             {
-            	Node tempNode =  (Node) intersections.get(contNodes).getPreviousArcs().get(contArcs);
+            	Node tempNode =  (Node) intersections.get(contNodes).getNextArcs().get(contArcs);
                 
-            	if ( tempNode.getIntersectionNumb() == pIntersection.getIntersectionNumb())
-                    intersections.get(contNodes).getPreviousArcs().remove(contArcs);
+            	if ( tempNode.getSeed() == pIntersection.getSeed())
+            		intersections.get(contNodes).getNextArcs().remove(contArcs);
             }
         }
-
+        
+        // Remove specified Node from graph
         intersections.remove(pIntersection);
     }
 	
@@ -57,16 +55,16 @@ public class PathGraph {
     public void visitAdjacentNodes(Node pNode)
     {
         visitIntersection(pNode);
-        System.out.print(pNode.getIntersectionNumb()+"  ");
+        System.out.print(pNode.getSeed()+"  ");
 
         // for each arc
-        for (int cont = 0; cont < pNode.getPreviousArcs().size(); cont++)
+        for (int cont = 0; cont < pNode.getNextArcs().size(); cont++)
         {
             // mark as visited
-            if (isNodeVisited((Node) pNode.getPreviousArcs().get(cont)) == false)
+            if (isNodeVisited((Node) pNode.getNextArcs().get(cont)) == false)
             {
-            	Node tempNode = (Node) pNode.getPreviousArcs().get(cont);
-            	visitAdjacentNodes(findNode(tempNode.getIntersectionNumb()));
+            	Node tempNode = (Node) pNode.getNextArcs().get(cont);
+            	visitAdjacentNodes(findNode(tempNode.getSeed()));
             }
         }
     }
@@ -74,7 +72,7 @@ public class PathGraph {
     public void visitIntersection(Node pNode)
     {
         for (int i = 0; i < intersections.size(); i++) {
-            if (pNode.getIntersectionNumb() == intersections.get(i).getIntersectionNumb())
+            if (pNode.getSeed() == intersections.get(i).getSeed())
             	intersections.get(i).setVisited(true);
         }
     }
@@ -82,7 +80,7 @@ public class PathGraph {
     public boolean isNodeVisited(Node pNode)
     {
         for (int i = 0; i < intersections.size(); i++) {
-            if (pNode.getIntersectionNumb() == intersections.get(i).getIntersectionNumb())
+            if (pNode.getSeed() == intersections.get(i).getSeed())
                 return intersections.get(i).getVisited();
         }
         
@@ -90,7 +88,40 @@ public class PathGraph {
         return false;
     }
     
-    public void generateGraph()
+    public void setInitialIntersection()
+    {
+    	BigInteger initialSeed = BigInteger.valueOf(6);
+    	
+    	intersections.add(new Node(initialSeed, 1, ""));
+    	currentParents.add(intersections.get(0));
+    }
+    
+    public void generateLevel()
+    {
+    	ArrayList <Node> newParents = new ArrayList<Node>();
+    	
+    	//System.out.println(" ");
+    	
+    	for (Node parent : currentParents)
+    	{
+    		
+    		//System.out.println(parent.getLevel());
+    		parent.generateAdjacents();
+    		intersections.add(parent);
+    		
+    		// Set new parents
+    		for (Node newParent : parent.getNextArcs())
+    		{
+    			newParents.add(newParent);
+    		}
+    	}
+    	
+    	// New generation of parents
+    	currentParents.clear();
+    	currentParents = newParents;
+    }
+    
+    /*public void generateGraph()
     {
     	
 		ArrayList <Node> parents = new ArrayList<Node>();
@@ -117,8 +148,8 @@ public class PathGraph {
 				{
 					seed = seedFunction(seed);	
 					child = new Node(seed, assignLevel(parent.getLevel()), "");
-					parent.addNextArcs(child);
-					child.addPreviousArc(parent);				
+					parent.addNextArc(child);
+					child.setParentArc(parent);				
 					tempParents.add(child);
 					
 					System.out.println("HIJO: " +  "seed:" + child.getSeed() + " nivel:" + child.getLevel());
@@ -130,57 +161,15 @@ public class PathGraph {
 			// New generation of parents
 			parents.clear();
 			parents = tempParents;
-
-			/*System.out.println("SIZE TEMP PARENTS:" + tempParents.size());
-			System.out.println("SIZE NEW PARENTS:" + parents.size());		*/	
-			
     	}
 
-	}
-    
-    public int assignLevel(int parentLevel)
-    {
-    	int level = parentLevel + 1;
-    	
-    	if (level <= 4)
-    		return level;
-    	
-    	else
-    		return 1;
-    }
-    
-    public int getNumbOfNextIntersections(int value)
-    {
-    	if (value >= 0 && value <= 2)
-    		return 1;
-    	
-    	if (value == 3 || value ==4)
-    		return 2;
-    	
-    	if (value == 5 || value == 6)
-    		return 3;
-    	
-    	else
-    		return 0;
-    }
-    
-    public int seedFunction(int seed)
-    {
-    	return (seed * 3 + 5) % 7;
-    }
-
+	}*/
 	
 	public void graphToString ()
     {
         for (int i = 0; i < intersections.size(); i++)
         {
-            System.out.print("Nodo "+intersections.get(i).getLevel()+":  ");
-            
-            for (int j = 0; j < intersections.get(i).getPreviousArcs().size(); j++) 
-            {
-            	Node tempNode =  (Node) intersections.get(i).getPreviousArcs().get(j);
-                System.out.print("Anteriores: "+ tempNode.getLevel() +"  ");
-            }            
+            System.out.print("Nodo "+intersections.get(i).getLevel()+":  " + "Padre: "+ intersections.get(i).getParentArc().getLevel());        
             
             for (int j = 0; j < intersections.get(i).getNextArcs().size(); j++) 
             {

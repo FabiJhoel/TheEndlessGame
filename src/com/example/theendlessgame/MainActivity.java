@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-import BusinessLogic.PathGraph;
+import BusinessLogic.*;
+
+import java.math.BigInteger;
 
 public class MainActivity extends Activity {
 
@@ -27,11 +29,36 @@ public class MainActivity extends Activity {
         
         PathGraph pg = new PathGraph();
         
-        pg.generateGraph();
-        pg.graphToString ();
+        pg.setInitialIntersection();
+        pg.generateLevel();
+        pg.generateLevel();
+        pg.generateLevel();
+        pg.generateLevel();
+        pg.generateLevel();
         
         
+        
+       /* BigInteger seed = BigInteger.valueOf(6);
+        BigInteger m = BigInteger.valueOf((long)Math.pow(2, 60) + 1);
+        BigInteger a = BigInteger.valueOf(9301);
+        BigInteger c = BigInteger.valueOf(49297);
+                
+
+        
+        for (int i= 0; i<10; i++)
+        {
+        	//seed = (a*seed + c) % m
+        	
+        	System.out.println(seed);
+
+        	seed = seed.multiply(a);
+        	seed = seed.add(c);
+        	seed = seed.mod(m);
+        	
+        }
+*/
     }
+    
 
 
     @Override
