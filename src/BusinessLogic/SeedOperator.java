@@ -23,15 +23,15 @@ public class SeedOperator {
 	      return instance;
 	   }
 	
-	public int getNumbOfNextIntersections()
+	public int getNumbOfNextIntersections(BigInteger parentSeed)
     {
 		BigInteger divisorTwo = BigInteger.valueOf(2);
 		BigInteger divisorThree = BigInteger.valueOf(3);
 		
-		if (seed.mod(divisorTwo).equals(BigInteger.ZERO)) 
+		if (parentSeed.mod(divisorTwo).equals(BigInteger.ZERO)) 
 			return 1;
 		
-		if (seed.mod(divisorThree).equals(BigInteger.ZERO)) 
+		if (parentSeed.mod(divisorThree).equals(BigInteger.ZERO)) 
 			return 2;
 		
 		else 

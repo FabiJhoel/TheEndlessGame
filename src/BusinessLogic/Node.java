@@ -117,15 +117,15 @@ public class Node {
 	
 	public void generateAdjacents()
 	{
-		int numbOfChildren = seedOp.getNumbOfNextIntersections();
-		BigInteger childrenSeed = seedOp.getNewSeed();
+		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed);
+		BigInteger childrenSeed = null; 
 		
 		System.out.println("PADRE #" + seed + " Nivel: " + level);
 		
 		for (int contChildren = 0; contChildren < numbOfChildren; contChildren++)
 		{		
+			childrenSeed = seedOp.getNewSeed();			
 			addNextArc(new Node(childrenSeed, assignLevel(level), ""));
-			childrenSeed = seedOp.getNewSeed();
 		}
 		
 		for (Node c : getNextArcs())

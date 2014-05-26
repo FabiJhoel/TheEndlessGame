@@ -91,9 +91,7 @@ public class PathGraph {
     public void setInitialIntersection()
     {
     	BigInteger initialSeed = BigInteger.valueOf(6);
-    	
-    	intersections.add(new Node(initialSeed, 1, ""));
-    	currentParents.add(intersections.get(0));
+    	currentParents.add(new Node(initialSeed, 1, ""));
     }
     
     public void generateLevel()
@@ -121,49 +119,25 @@ public class PathGraph {
     	currentParents = newParents;
     }
     
-    /*public void generateGraph()
+    public Node suggestPath(ArrayList<Node> paths) //los niveles superiores a estos nodos ya deben estar cargados
     {
+    	Node bestPath = null; 	//global solution 
     	
-		ArrayList <Node> parents = new ArrayList<Node>();
-		ArrayList <Node> tempParents = null;
-		Node child;
-		
-		// create initial node
-    	int seed = seedFunction(12);
-    	parents.add(new Node(seed, 1,""));    	
-		
-		for (int contLevels = 0; contLevels < 3; contLevels++) // number of levels to create (4)
-    	{		
-			System.out.println("Nuevo nivel");	
-			tempParents = new ArrayList<Node>();
-    			
-			for (int contParents = 0; contParents < parents.size(); contParents++) // goes over each parent
-			{					
-				Node parent = parents.get(contParents);					
-				int numbOfChildren = getNumbOfNextIntersections(parent.getSeed());
-				
-				System.out.println("PADRE: " + "seed:" + parent.getSeed() + " nivel:" + parent.getLevel());
-				
-				for (int contChildren = 0; contChildren < numbOfChildren; contChildren++) // create children nodes
-				{
-					seed = seedFunction(seed);	
-					child = new Node(seed, assignLevel(parent.getLevel()), "");
-					parent.addNextArc(child);
-					child.setParentArc(parent);				
-					tempParents.add(child);
-					
-					System.out.println("HIJO: " +  "seed:" + child.getSeed() + " nivel:" + child.getLevel());
-				}
-				
-				intersections.add(parent);
-			}
-			
-			// New generation of parents
-			parents.clear();
-			parents = tempParents;
+    	while(!paths.isEmpty())
+    	{
+    		Node localSol = paths.get(0);  	// possible solution;	
+    		paths.remove(0);
+    		
+    		
+    		if (bestPath == null || MatrixOperator.getBestTransitiveClosure(localSol, bestPath) == 1)
+    		{
+    			bestPath = localSol;
+    		}
+    		
     	}
-
-	}*/
+    	
+    	return bestPath;
+    }
 	
 	public void graphToString ()
     {

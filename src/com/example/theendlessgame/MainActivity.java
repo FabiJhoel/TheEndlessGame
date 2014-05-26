@@ -13,6 +13,7 @@ import android.os.Build;
 import BusinessLogic.*;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
@@ -29,23 +30,47 @@ public class MainActivity extends Activity {
         
         PathGraph pg = new PathGraph();
         
-        pg.setInitialIntersection();
+        /*pg.setInitialIntersection();
         pg.generateLevel();
         pg.generateLevel();
         pg.generateLevel();
         pg.generateLevel();
-        pg.generateLevel();
+        pg.generateLevel();*/
+        
+        BigInteger seed = BigInteger.valueOf(6);
+        Node primero = new Node(seed,1,"");       
+        primero.generateAdjacents();
+        
+        for (Node a : primero.getNextArcs())
+        {
+        	a.generateAdjacents();
+        }
+        
+        BigInteger seed2 = BigInteger.valueOf(310523254145208177L);
+        Node segundo = new Node(seed2,1,"");
+        segundo.generateAdjacents();
+        
+        for (Node a : segundo.getNextArcs())
+        {
+        	a.generateAdjacents();
+        }
         
         
+        ArrayList<Node> paths = new ArrayList<Node>();
+        paths.add(primero);
+        paths.add(segundo);
+        Node resp = pg.suggestPath(paths);
         
-       /* BigInteger seed = BigInteger.valueOf(6);
+        System.out.println(resp.getSeed() + "  Nivel: " + resp.getLevel());
+        
+      /*  BigInteger seed = BigInteger.valueOf(6);
         BigInteger m = BigInteger.valueOf((long)Math.pow(2, 60) + 1);
         BigInteger a = BigInteger.valueOf(9301);
         BigInteger c = BigInteger.valueOf(49297);
                 
 
         
-        for (int i= 0; i<10; i++)
+        for (int i= 0; i<20; i++)
         {
         	//seed = (a*seed + c) % m
         	
@@ -55,8 +80,8 @@ public class MainActivity extends Activity {
         	seed = seed.add(c);
         	seed = seed.mod(m);
         	
-        }
-*/
+        }*/
+
     }
     
 
