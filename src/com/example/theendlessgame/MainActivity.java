@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
         
         System.out.println(resp.getSeed() + "  Nivel: " + resp.getLevel());
         
-      /*  BigInteger seed = BigInteger.valueOf(6);
+        BigInteger seed = BigInteger.valueOf(6);
         BigInteger m = BigInteger.valueOf((long)Math.pow(2, 60) + 1);
         BigInteger a = BigInteger.valueOf(9301);
         BigInteger c = BigInteger.valueOf(49297);
@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
         	seed = seed.add(c);
         	seed = seed.mod(m);
         	
-        }*/
+        }
 
     }
     
