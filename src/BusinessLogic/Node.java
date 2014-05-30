@@ -114,6 +114,11 @@ public class Node {
     	else
     		return 1;
     }
+	 
+	 public SeedOperator getSeedOp()
+	 {
+		 return seedOp;
+	 }
 	
 	public void generateAdjacents()
 	{

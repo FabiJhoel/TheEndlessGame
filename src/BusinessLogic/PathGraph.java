@@ -102,8 +102,6 @@ public class PathGraph {
     	
     	for (Node parent : currentParents)
     	{
-    		
-    		//System.out.println(parent.getLevel());
     		parent.generateAdjacents();
     		intersections.add(parent);
     		

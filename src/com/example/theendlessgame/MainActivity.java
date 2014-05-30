@@ -48,6 +48,9 @@ public class MainActivity extends Activity {
         
         BigInteger seed2 = BigInteger.valueOf(310523254145208177L);
         Node segundo = new Node(seed2,1,"");
+        
+        segundo.getSeedOp().setInitialSeed(seed2);
+        
         segundo.generateAdjacents();
         
         for (Node a : segundo.getNextArcs())
@@ -63,7 +66,7 @@ public class MainActivity extends Activity {
         
         System.out.println(resp.getSeed() + "  Nivel: " + resp.getLevel());
         
-        BigInteger seed = BigInteger.valueOf(6);
+        /*BigInteger seed = BigInteger.valueOf(6);
         BigInteger m = BigInteger.valueOf((long)Math.pow(2, 60) + 1);
         BigInteger a = BigInteger.valueOf(9301);
         BigInteger c = BigInteger.valueOf(49297);
@@ -80,7 +83,7 @@ public class MainActivity extends Activity {
         	seed = seed.add(c);
         	seed = seed.mod(m);
         	
-        }
+        }*/
 
     }
     

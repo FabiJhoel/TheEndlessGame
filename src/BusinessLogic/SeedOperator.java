@@ -15,6 +15,10 @@ public class SeedOperator {
 	      // Exists only to avoid instantiation.
 	}
 
+	public void setInitialSeed(BigInteger seedVal) //to generate seed from a specific point (return paths)
+	{
+		seed = seedVal;
+	}
 
 	public static SeedOperator getInstance() {
 	      if(instance == null) {
