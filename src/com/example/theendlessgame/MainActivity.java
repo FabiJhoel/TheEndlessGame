@@ -30,14 +30,21 @@ public class MainActivity extends Activity {
         
         PathGraph pg = new PathGraph();
         
-        /*pg.setInitialIntersection();
+      /*  BigInteger seed = BigInteger.valueOf(6);
+        Node primero = new Node(seed,1,"");       
+        pg.visitIntersection(primero);
+        BigInteger seed2 = BigInteger.valueOf(310523254145208177L);
+        Node segundo = new Node(seed2,1,"");
+        pg.visitIntersection(segundo);*/
+        
+       /* pg.setInitialIntersection();
         pg.generateLevel();
         pg.generateLevel();
         pg.generateLevel();
         pg.generateLevel();
         pg.generateLevel();*/
         
-        BigInteger seed = BigInteger.valueOf(6);
+        /*BigInteger seed = BigInteger.valueOf(6);
         Node primero = new Node(seed,1,"");       
         primero.generateAdjacents();
         
@@ -64,26 +71,7 @@ public class MainActivity extends Activity {
         paths.add(segundo);
         Node resp = pg.suggestPath(paths);
         
-        System.out.println(resp.getSeed() + "  Nivel: " + resp.getLevel());
-        
-        /*BigInteger seed = BigInteger.valueOf(6);
-        BigInteger m = BigInteger.valueOf((long)Math.pow(2, 60) + 1);
-        BigInteger a = BigInteger.valueOf(9301);
-        BigInteger c = BigInteger.valueOf(49297);
-                
-
-        
-        for (int i= 0; i<20; i++)
-        {
-        	//seed = (a*seed + c) % m
-        	
-        	System.out.println(seed);
-
-        	seed = seed.multiply(a);
-        	seed = seed.add(c);
-        	seed = seed.mod(m);
-        	
-        }*/
+        System.out.println(resp.getSeed() + "  Nivel: " + resp.getLevel());*/
 
     }
     

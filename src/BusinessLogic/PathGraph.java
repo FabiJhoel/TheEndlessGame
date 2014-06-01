@@ -1,93 +1,52 @@
 package BusinessLogic;
 
 import java.util.ArrayList;
+
+import com.google.common.collect.*;
 import java.math.BigInteger;
+import java.util.Collection;
 
 public class PathGraph {
 	
-	private ArrayList<Node> intersections;
 	private ArrayList <Node> currentParents = new ArrayList<Node>();
-
-	public PathGraph()
-    {
-		intersections = new ArrayList<Node>();
-    }
+	private static Multimap<Integer, Node> visitedNodes = HashMultimap.create();
 	
-	public ArrayList<Node> getIntersections() {
-		return intersections;
-	}
-	
-	public void addIntersection(Node pNode){
-		
-		intersections.add(pNode);
-	}
+	// Looks for a node in the visitedNodes Hash
+	public Boolean findVisitedNode(Node pNode)
+	{
+		Collection <Node> nodes = visitedNodes.get(pNode.getLevel());
 
-	public Node findNode (BigInteger nodeID){
-
-        for (int cont = 0; cont < intersections.size(); cont++)
+        for (Node intersection : nodes) 
         {
-            if (intersections.get(cont).getSeed() == nodeID)
-                return intersections.get(cont);
-        }
-
-        return null;
-    }
-	
-	public void removeNode (Node pIntersection)
-    {
-		// Remove arcs that contain this Node
-        for (int contNodes = 0; contNodes < intersections.size(); contNodes++)
-        {
-            for (int contArcs = 0; contArcs < intersections.get(contNodes).getNextArcs().size(); contArcs++) 
-            {
-            	Node tempNode =  (Node) intersections.get(contNodes).getNextArcs().get(contArcs);
-                
-            	if ( tempNode.getSeed() == pIntersection.getSeed())
-            		intersections.get(contNodes).getNextArcs().remove(contArcs);
-            }
-        }
+        	if (intersection == pNode)
+        		return true;       	
+        }  
         
-        // Remove specified Node from graph
-        intersections.remove(pIntersection);
-    }
-	
-    // visits every arc of a specific node
-    public void visitAdjacentNodes(Node pNode)
-    {
-        visitIntersection(pNode);
-        System.out.print(pNode.getSeed()+"  ");
-
-        // for each arc
-        for (int cont = 0; cont < pNode.getNextArcs().size(); cont++)
-        {
-            // mark as visited
-            if (isNodeVisited((Node) pNode.getNextArcs().get(cont)) == false)
-            {
-            	Node tempNode = (Node) pNode.getNextArcs().get(cont);
-            	visitAdjacentNodes(findNode(tempNode.getSeed()));
-            }
-        }
-    }
-
-    public void visitIntersection(Node pNode)
-    {
-        for (int i = 0; i < intersections.size(); i++) {
-            if (pNode.getSeed() == intersections.get(i).getSeed())
-            	intersections.get(i).setVisited(true);
-        }
-    }
-
-    public boolean isNodeVisited(Node pNode)
-    {
-        for (int i = 0; i < intersections.size(); i++) {
-            if (pNode.getSeed() == intersections.get(i).getSeed())
-                return intersections.get(i).getVisited();
-        }
-        
-        // if is not visited
         return false;
     }
-    
+
+	// Adds a node into visitedNodes Hash
+    public void visitIntersection(Node pNode)
+    {    	
+    	pNode.setVisited(true);
+    	
+    	// No space
+    	if (visitedNodes.get(pNode.getLevel()).size() >= 3)    	
+    	{
+    		Collection <Node> nodes = visitedNodes.get(pNode.getLevel());
+
+	        for (Node intersection : nodes) 
+	        {	        	
+	        	nodes.remove(intersection);
+	        	break;
+	        }            
+    	}
+    	
+    	// Hash table has space available
+    	if (!findVisitedNode(pNode))
+    		visitedNodes.put(pNode.getLevel(), pNode);    	
+    }
+
     public void setInitialIntersection()
     {
     	BigInteger initialSeed = BigInteger.valueOf(6);
@@ -97,24 +56,87 @@ public class PathGraph {
     public void generateLevel()
     {
     	ArrayList <Node> newParents = new ArrayList<Node>();
-    	
-    	//System.out.println(" ");
-    	
+
     	for (Node parent : currentParents)
     	{
     		parent.generateAdjacents();
-    		intersections.add(parent);
-    		
+    		   	
     		// Set new parents
-    		for (Node newParent : parent.getNextArcs())
-    		{
-    			newParents.add(newParent);
+    		for (Node child : parent.getNextArcs())
+    		{   			
+    			newParents.add(child);	
     		}
+    		
+    		// Determine return path
+    		if (parent.getLevel() == 4)
+    		{
+    			setReturnPath(parent.getNextArcs());
+    		}		
     	}
     	
     	// New generation of parents
     	currentParents.clear();
     	currentParents = newParents;
+    }
+    
+    // Establish a isReturn intersection
+    public void setReturnPath(ArrayList<Node> paths)
+    { 
+    	BigInteger divisorTwo = BigInteger.valueOf(2);
+    	
+    	if (paths.size() == 1)
+    		paths.get(0).setIsReturn(true);
+    	
+    	else
+    	{   // Selects the first pair seed as return path
+        	for (Node node : paths)
+        	{
+        		if (node.getSeed().mod(divisorTwo).equals(BigInteger.ZERO))
+        			node.setIsReturn(true);
+        	}
+    	}		
+    }
+    
+    // Select a node to return from the visitedNodes Hash
+    public Node selectVisitedNode(Node returnPath)
+    {
+    	BigInteger divisorFive = BigInteger.valueOf(5);
+    	int remainder = returnPath.getSeed().mod(divisorFive).intValue(); // value from 0 to 4
+    	int key = 0;
+    	Node nodeToReturn = null;
+    	
+    	switch (remainder) // Selects level to return to
+    	{
+	    	case 0:
+	    		key = 1;
+	    		break;
+	    		
+	    	case 1:
+	    		key = 1;
+	    		break;
+	    		
+	    	case 2:
+	    		key = 2;
+	    		break;
+	    		
+	    	case 3:
+	    		key = 3;
+	    		break;
+	    		
+	    	case 4:
+	    		key = 4;
+	    		break;
+    	}
+    	
+    	Collection <Node> nodes = visitedNodes.get(key);
+    	
+    	for (Node path : nodes) // Selects first element of the key
+        {	        	
+    		nodeToReturn = path;
+    		return nodeToReturn;
+        }   
+    	
+    	return nodeToReturn;
     }
     
     public Node suggestPath(ArrayList<Node> paths) //los niveles superiores a estos nodos ya deben estar cargados
@@ -135,22 +157,6 @@ public class PathGraph {
     	}
     	
     	return bestPath;
-    }
-	
-	public void graphToString ()
-    {
-        for (int i = 0; i < intersections.size(); i++)
-        {
-            System.out.print("Nodo "+intersections.get(i).getLevel()+":  " + "Padre: "+ intersections.get(i).getParentArc().getLevel());        
-            
-            for (int j = 0; j < intersections.get(i).getNextArcs().size(); j++) 
-            {
-            	Node tempNode =  (Node) intersections.get(i).getNextArcs().get(j);
-                System.out.print("Siguientes: "+ tempNode.getLevel() +"  ");
-            }
-            
-            System.out.println("");
-        }
     }
 
 }
