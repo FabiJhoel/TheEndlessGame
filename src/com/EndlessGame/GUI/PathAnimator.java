@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.example.guiexample.R;
 
+import BusinessLogic.*;
 import android.widget.RelativeLayout;
 
 public class PathAnimator extends Thread{
@@ -11,8 +12,23 @@ public class PathAnimator extends Thread{
 	private int seconds;
 	private MainScreen mainScreen;
 	private BackGroundMoveable background;
+	private PathGraph pathGraph;
+	private Node currentNode;
 	
-	public PathAnimator(MainScreen pMainScreen){
+	public PathAnimator(MainScreen pMainScreen)
+	{
+		// Logical path
+		pathGraph = new PathGraph();
+		
+		// Load 4 levels and set initial position
+		currentNode = pathGraph.setInitialIntersection();	
+		
+		pathGraph.generateLevel();// Children of initial node
+		pathGraph.generateLevel();
+		pathGraph.generateLevel(); 
+		
+		pathGraph.visitIntersection(currentNode);
+				
 		this.mainScreen = pMainScreen;
 		this.speed = seconds = 0;
 		background = new BackGroundMoveable(mainScreen);
@@ -22,20 +38,37 @@ public class PathAnimator extends Thread{
 	public void run(){
 		boolean stop = false;
 		while(!stop){
-			if (seconds < 50){
+			if (seconds < 50)
 				increaseSpeed();
-			}
-			else{
+			
+			else
+			{	//Verify if currentNode is a return path
+				if (currentNode.getIsReturn())
+					currentNode = pathGraph.selectVisitedNode(currentNode);
+				
 				activateTeletransporters();
 			}
-			isTeletransporterCollition();
 			
-			try {
+			// Verify collision and select new currentNode and visit it
+			isTeletransporterCollision();
+			// currentNode = el node que indica la colisión
+			pathGraph.visitIntersection(currentNode);
+			
+			// Generate new level
+			pathGraph.generateLevel(); 
+			
+			
+			try 
+			{
 				Thread.sleep(200);
-			} catch (InterruptedException e1) {
+			} 
+			
+			catch (InterruptedException e1) 
+			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
 			seconds++;
 		}
 	}
@@ -55,11 +88,12 @@ public class PathAnimator extends Thread{
 	}
 	
 	public void activateTeletransporters(){
-		background.setTeletransportersAmount(3);  ///////////Indicar cantidad de Intersecciones
+
+		background.setTeletransportersAmount(currentNode.getNextArcs().size());  ///////////Indicar cantidad de Intersecciones
 		seconds = 0;
 	}
 	
-	protected void isTeletransporterCollition(){
+	protected void isTeletransporterCollision(){
 		boolean collition = false;
 		Vehicle vehicle = background.getVehicle();
 

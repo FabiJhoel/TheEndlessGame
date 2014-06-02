@@ -125,7 +125,7 @@ public class Node {
 		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed);
 		BigInteger childrenSeed = null; 
 		
-		System.out.println("PADRE #" + seed + " Nivel: " + level);
+		//System.out.println("PADRE #" + seed + " Nivel: " + level);
 		
 		for (int contChildren = 0; contChildren < numbOfChildren; contChildren++)
 		{		
@@ -135,7 +135,7 @@ public class Node {
 		
 		for (Node c : getNextArcs())
 		{
-			System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());
+			//System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());
 		}
 	}
 	

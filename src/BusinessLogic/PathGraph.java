@@ -47,10 +47,13 @@ public class PathGraph {
     		visitedNodes.put(pNode.getLevel(), pNode);    	
     }
 
-    public void setInitialIntersection()
+    public Node setInitialIntersection()
     {
     	BigInteger initialSeed = BigInteger.valueOf(6);
-    	currentParents.add(new Node(initialSeed, 1, ""));
+    	Node initialNode = new Node(initialSeed, 1, "");
+    	currentParents.add(initialNode);
+    	
+    	return initialNode;
     }
     
     public void generateLevel()
