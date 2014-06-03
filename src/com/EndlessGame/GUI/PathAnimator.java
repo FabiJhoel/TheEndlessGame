@@ -1,8 +1,8 @@
 package com.EndlessGame.GUI;
 
-import java.util.ArrayList;
+import java.util.Random;
 
-import com.example.guiexample.R;
+import com.EndlessGame.GUI.R;
 
 import BusinessLogic.*;
 import android.widget.RelativeLayout;
@@ -39,23 +39,30 @@ public class PathAnimator extends Thread{
 		boolean stop = false;
 		while(!stop){
 			if (seconds < 50)
+			{
 				increaseSpeed();
-			
+				
+				if (seconds == 25)
+				{
+					activateEnemies();
+				}
+			}
 			else
 			{	//Verify if currentNode is a return path
 				if (currentNode.getIsReturn())
 					currentNode = pathGraph.selectVisitedNode(currentNode);
 				
 				activateTeletransporters();
+
+				// Generate new level
+				pathGraph.generateLevel(); 
 			}
 			
 			// Verify collision and select new currentNode and visit it
 			isTeletransporterCollision();
 			// currentNode = el node que indica la colisión
-			pathGraph.visitIntersection(currentNode);
+			pathGraph.visitIntersection(currentNode);		
 			
-			// Generate new level
-			pathGraph.generateLevel(); 
 			
 			
 			try 
@@ -65,7 +72,7 @@ public class PathAnimator extends Thread{
 			
 			catch (InterruptedException e1) 
 			{
-				// TODO Auto-generated catch block
+				// TODO Auto-generated catch block				
 				e1.printStackTrace();
 			}
 			
@@ -74,22 +81,39 @@ public class PathAnimator extends Thread{
 	}
 	
 	public void increaseSpeed(){
-		if(speed<12){
+		if(speed<6){
 			speed++;
 			background.setSpeed(speed);
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
+			
 				e1.printStackTrace();
 			}
 		}
 		
 	}
 	
+	public void activateEnemies()
+	{
+		int enemiesNumb = 0;  
+		
+		for (int i = 0; i<10; i++)
+        {   
+			enemiesNumb = 0;                      
+            Random randomGenerator = new Random();
+            
+            while (enemiesNumb == 0)
+            {
+                enemiesNumb = randomGenerator.nextInt(4);
+            }
+        }
+		
+		background.setEnemiesAmount(enemiesNumb);
+	}
 	public void activateTeletransporters(){
 
-		background.setTeletransportersAmount(currentNode.getNextArcs().size());  ///////////Indicar cantidad de Intersecciones
+		background.setTeletransportersAmount(2/*currentNode.getNextArcs().size()*/);  ///////////Indicar cantidad de Intersecciones
 		seconds = 0;
 	}
 	

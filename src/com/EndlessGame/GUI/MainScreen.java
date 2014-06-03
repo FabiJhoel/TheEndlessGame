@@ -1,6 +1,6 @@
 package com.EndlessGame.GUI;
 
-import com.example.guiexample.R;
+import com.EndlessGame.GUI.R;
 
 import android.app.Activity;
 import android.os.Bundle;

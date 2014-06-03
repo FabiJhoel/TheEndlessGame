@@ -2,7 +2,7 @@ package com.EndlessGame.GUI;
 
 import java.util.ArrayList;
 
-import com.example.guiexample.R;
+import com.EndlessGame.GUI.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,7 +21,9 @@ public class BackGroundMoveable extends View{
 	private ArrayList<Teletransporter> teletransporters;
 	private int teletransportersAmount;
 	private Vehicle vehicle;
-	
+	private Enemy enemy;
+	private ArrayList<Enemy> enemies;
+	private int enemiesAmount;
 	
 	public BackGroundMoveable(Context context) {
 		super(context);
@@ -34,6 +36,8 @@ public class BackGroundMoveable extends View{
 		teletransporters = new ArrayList<>();
 		teletransportersAmount = -1;
 		vehicle = new Vehicle(this, BitmapFactory.decodeResource(getResources(), R.drawable.car3));
+		enemies = new ArrayList<>();
+		enemiesAmount = -1;
 	}
 	
 	@Override
@@ -66,6 +70,7 @@ public class BackGroundMoveable extends View{
 		if (warp == false){
 			drawTeletransporters(canvas);
 			drawVehicle(canvas);
+			drawEnemy(canvas);
 		}
 		
 		invalidate();
@@ -98,21 +103,45 @@ public class BackGroundMoveable extends View{
 	}
 
 	protected void drawTeletransporters(Canvas canvas){
-		if (teletransportersAmount == -1){	
-			for (Teletransporter teletranspoter : teletransporters){
-				teletranspoter.onDraw(canvas);
+		if (teletransportersAmount == -1)
+		{	
+			for (Teletransporter teletranspoter : teletransporters)
+			{
+				teletranspoter.drawTeletransporter(canvas);
 				teletranspoter.setSpeed(speed);
 			}
 		}
-		else{
+		
+		else
+		{
 			clearTeletransporters();
 			addTeletransporters();
-			teletransportersAmount = -1;
+			teletransportersAmount = -1;	
 		}
 	}
 	
-	protected void drawVehicle(Canvas canvas){
-		vehicle.onDraw(canvas);
+	protected void drawVehicle(Canvas canvas)
+	{
+		vehicle.drawVehicle(canvas);
+	}
+	
+	private void drawEnemy(Canvas canvas)
+	{
+		if (enemiesAmount == -1)
+		{	
+			for (Enemy enemy : enemies)
+			{
+				enemy.drawEnemy(canvas);				
+				enemy.setSpeed(speed);
+			}
+		}
+		
+		else
+		{
+			clearEnemies();
+			addEnemies();
+			enemiesAmount = -1;		
+		}
 	}
 
 	//Getter and Setter
@@ -179,11 +208,15 @@ public class BackGroundMoveable extends View{
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
 	}
+	
+	public int getEnemiesAmount() {
+		return enemiesAmount;
+	}
 
-	
-	
-	
-	
+	public void setEnemiesAmount(int enemiesAmount) {
+		this.enemiesAmount = enemiesAmount;
+	}
+
 	public void addTeletransporters(){
 		switch(teletransportersAmount){
 		case 2:
@@ -203,6 +236,36 @@ public class BackGroundMoveable extends View{
 	public void clearTeletransporters(){
 		for (int index = 0; index < teletransporters.size(); index++){
 			teletransporters.remove(0);
+		}
+	}
+	
+	public void addEnemies(){
+		switch(enemiesAmount)
+		{		
+		case 1:
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			//Enemy.setLeftRoadLimit(220);
+			Enemy.setTopRoadLimit(-108);
+			break;
+		case 2:
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			//Enemy.setLeftRoadLimit(220);
+			Enemy.setTopRoadLimit(-108);
+			break;
+		case 3:
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			//Enemy.setLeftRoadLimit(220);
+			Enemy.setTopRoadLimit(-108);
+			break;
+		}
+	}
+	
+	public void clearEnemies(){
+		for (int index = 0; index < enemies.size(); index++){
+			enemies.remove(0);
 		}
 	}
 

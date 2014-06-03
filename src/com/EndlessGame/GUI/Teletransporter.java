@@ -28,7 +28,7 @@ public class Teletransporter{
         leftRoadLimit = leftRoadLimit+width;
 	}
 
-	protected void onDraw(Canvas canvas) {
+	protected void drawTeletransporter(Canvas canvas) {
 		Rect src = new Rect(0, 0, width, height);
         Rect dst = new Rect(coordX, coordY, coordX+width, coordY+height);
         canvas.drawBitmap(teletImage, src, dst, null);

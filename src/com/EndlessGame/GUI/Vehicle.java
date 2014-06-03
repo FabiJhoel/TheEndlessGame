@@ -24,8 +24,8 @@ public class Vehicle{
 		coordY = 500;
 	}
 
-	protected void onDraw(Canvas canvas) {
-		Rect src = new Rect(0, 0, width, height);
+	protected void drawVehicle(Canvas canvas) {
+		Rect src = new Rect(0, 0, width, height); 
         Rect dst = new Rect(coordX, coordY, coordX+width, coordY+height);
         canvas.drawBitmap(teletImage, src, dst, null);
 	}

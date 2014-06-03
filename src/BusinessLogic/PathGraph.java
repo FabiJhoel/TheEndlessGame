@@ -3,6 +3,7 @@ package BusinessLogic;
 import java.util.ArrayList;
 
 import com.google.common.collect.*;
+
 import java.math.BigInteger;
 import java.util.Collection;
 
@@ -58,28 +59,36 @@ public class PathGraph {
     
     public void generateLevel()
     {
-    	ArrayList <Node> newParents = new ArrayList<Node>();
-
-    	for (Node parent : currentParents)
-    	{
-    		parent.generateAdjacents();
-    		   	
-    		// Set new parents
-    		for (Node child : parent.getNextArcs())
-    		{   			
-    			newParents.add(child);	
-    		}
+    	try {
     		
-    		// Determine return path
-    		if (parent.getLevel() == 4)
-    		{
-    			setReturnPath(parent.getNextArcs());
-    		}		
+	    	ArrayList <Node> newParents = new ArrayList<Node>();
+	
+	    	for (Node parent : currentParents)
+	    	{
+	    		parent.generateAdjacents();
+	    		   	
+	    		// Set new parents
+	    		for (Node child : parent.getNextArcs())
+	    		{   			
+	    			newParents.add(child);	
+	    		}
+	    		
+	    		// Determine return path
+	    		if (parent.getLevel() == 4)
+	    		{
+	    			setReturnPath(parent.getNextArcs());
+	    		}		
+	    	}
+	    	
+	    	// New generation of parents
+	    	currentParents.clear();
+	    	currentParents = newParents;
     	}
     	
-    	// New generation of parents
-    	currentParents.clear();
-    	currentParents = newParents;
+    	catch(Exception e)
+    	{
+    		System.out.println("ERROR " + e.getMessage());
+    	}
     }
     
     // Establish a isReturn intersection

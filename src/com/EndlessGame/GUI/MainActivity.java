@@ -1,6 +1,6 @@
 package com.EndlessGame.GUI;
 
-import com.example.guiexample.R;
+import com.EndlessGame.GUI.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void btnStartOnClick(View view){
-		startActivity(new Intent("com.example.guiexample.MAINSCREEN"));
+		startActivity(new Intent("com.EndlessGame.GUI.MAINSCREEN"));
 	}
 
 }
