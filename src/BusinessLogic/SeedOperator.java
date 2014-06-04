@@ -20,8 +20,27 @@ public class SeedOperator {
 	{
 		seed = seedVal;
 	}
+	
+	// Gets seed according to its ID 
+	public BigInteger getSpecificSeed(long pos)
+	{
+		BigInteger tempSeed = BigInteger.valueOf(6);
+		
+		while ((pos - 1) != 0L) 
+		{
+			tempSeed = tempSeed.multiply(a);
+			tempSeed = tempSeed.add(c);
+			tempSeed = tempSeed.mod(m);	
+			
+			pos --;
+		}
+		
+		return tempSeed;
+		
+	}
 
-	public static SeedOperator getInstance() {
+	public static SeedOperator getInstance() 
+	{
 	      if(instance == null) {
 	         instance = new SeedOperator();
 	      }

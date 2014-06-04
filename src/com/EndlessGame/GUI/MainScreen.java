@@ -17,9 +17,12 @@ public class MainScreen extends Activity{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //No Title
 		setContentView(R.layout.main_screen);
-
+		
+		
 		pathAnimator = new PathAnimator(this);
 		pathAnimator.start();
+		
+
 	}
 
 }

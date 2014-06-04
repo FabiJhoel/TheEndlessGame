@@ -13,7 +13,7 @@ public class PathAnimator extends Thread{
 	private MainScreen mainScreen;
 	private BackGroundMoveable background;
 	private PathGraph pathGraph;
-	private Node currentNode;
+	//private Node currentNode;
 	
 	public PathAnimator(MainScreen pMainScreen)
 	{
@@ -21,13 +21,13 @@ public class PathAnimator extends Thread{
 		pathGraph = new PathGraph();
 		
 		// Load 4 levels and set initial position
-		currentNode = pathGraph.setInitialIntersection();	
+		//currentNode = pathGraph.setInitialIntersection();	
 		
-		pathGraph.generateLevel();// Children of initial node
+		/*pathGraph.generateLevel();// Children of initial node
 		pathGraph.generateLevel();
-		pathGraph.generateLevel(); 
+		pathGraph.generateLevel(); */
 		
-		pathGraph.visitIntersection(currentNode);
+		//pathGraph.visitIntersection(currentNode);
 				
 		this.mainScreen = pMainScreen;
 		this.speed = seconds = 0;
@@ -49,19 +49,19 @@ public class PathAnimator extends Thread{
 			}
 			else
 			{	//Verify if currentNode is a return path
-				if (currentNode.getIsReturn())
-					currentNode = pathGraph.selectVisitedNode(currentNode);
+				/*if (currentNode.getIsReturn())
+					currentNode = pathGraph.selectVisitedNode(currentNode);*/
 				
 				activateTeletransporters();
 
 				// Generate new level
-				pathGraph.generateLevel(); 
+				//pathGraph.generateLevel(); 
 			}
 			
 			// Verify collision and select new currentNode and visit it
 			isTeletransporterCollision();
 			// currentNode = el node que indica la colisión
-			pathGraph.visitIntersection(currentNode);		
+			//pathGraph.visitIntersection(currentNode);		
 			
 			
 			
@@ -142,7 +142,7 @@ public class PathAnimator extends Thread{
 		background.setTeletransportersAmount(-1);
 		background.clearTeletransporters();
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1500);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -14,7 +14,6 @@ public class Enemy {
 	private int speed;
 	private int coordX;
 	private int coordY;
-	private static int leftRoadLimit = 220;
 	private static int topRoadLimit = -108;
 	private final int lane1 = 220;
 	private final int lane2 = 430;
@@ -32,7 +31,7 @@ public class Enemy {
 		speed = pSpeed;
 		coordX = chooseLane();
 		coordY = topRoadLimit;
-        topRoadLimit = topRoadLimit + (2*height);
+        topRoadLimit = topRoadLimit - (2*height);
 	}
 	
 	public void drawEnemy(Canvas canvas)
@@ -88,15 +87,7 @@ public class Enemy {
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
-	
-	public static int getLeftRoadLimit() {
-		return leftRoadLimit;
-	}
 
-	public static void setLeftRoadLimit(int leftRoadLimit) {
-		Enemy.leftRoadLimit = leftRoadLimit;
-	}
-	
 	public static int getTopRoadLimit() {
 		return topRoadLimit;
 	}

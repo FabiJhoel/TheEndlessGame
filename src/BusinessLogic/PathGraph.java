@@ -26,32 +26,27 @@ public class PathGraph {
         return false;
     }
 
-	// Adds a node into visitedNodes Hash
-    public void visitIntersection(Node pNode)
-    {    	
-    	pNode.setVisited(true);
-    	
-    	// No space
-    	if (visitedNodes.get(pNode.getLevel()).size() >= 3)    	
-    	{
-    		Collection <Node> nodes = visitedNodes.get(pNode.getLevel());
-
-	        for (Node intersection : nodes) 
-	        {	        	
-	        	nodes.remove(intersection);
-	        	break;
-	        }            
-    	}
-    	
-    	// Hash table has space available
-    	if (!findVisitedNode(pNode))
-    		visitedNodes.put(pNode.getLevel(), pNode);    	
-    }
+	public void loadHashVisitedNodes(Node isReturnNode)
+	{
+		// Get all parents
+		ArrayList<Node> parents = isReturnNode.getAllParents();
+		
+		// Load parents to hash table
+		for (Node visitedNode : parents)
+		{
+			if (visitedNodes.get(visitedNode.getLevel()).size() < 3)    	
+	    	{	    		
+	    		if (!findVisitedNode(visitedNode))
+		    		visitedNodes.put(visitedNode.getLevel(), visitedNode);	                  
+	    	}	    	    				
+		}
+	}
 
     public Node setInitialIntersection()
     {
     	BigInteger initialSeed = BigInteger.valueOf(6);
     	Node initialNode = new Node(initialSeed, 1, "");
+    	initialNode.setIsReal(true);
     	currentParents.add(initialNode);
     	
     	return initialNode;
@@ -74,7 +69,7 @@ public class PathGraph {
 	    		}
 	    		
 	    		// Determine return path
-	    		if (parent.getLevel() == 4)
+	    		if (parent.getLevel() == 3)
 	    		{
 	    			setReturnPath(parent.getNextArcs());
 	    		}		
@@ -87,58 +82,38 @@ public class PathGraph {
     	
     	catch(Exception e)
     	{
-    		System.out.println("ERROR " + e.getMessage());
+    		System.out.println("ERROR generating new level " + e.getMessage());
     	}
     }
     
-    // Establish a isReturn intersection
+    // Establish a isReturn intersection (level 4 nodes)
     public void setReturnPath(ArrayList<Node> paths)
     { 
     	BigInteger divisorTwo = BigInteger.valueOf(2);
+    	boolean selected = false;
+    			
+	   // Selects the first pair seed as return path
+    	for (Node node : paths)
+    	{
+    		if (node.getSeed().mod(divisorTwo).equals(BigInteger.ZERO))
+    		{
+    			node.setIsReturn(true);
+    			selected = true;
+    		}
+    	}
     	
-    	if (paths.size() == 1)
-    		paths.get(0).setIsReturn(true);
-    	
-    	else
-    	{   // Selects the first pair seed as return path
-        	for (Node node : paths)
-        	{
-        		if (node.getSeed().mod(divisorTwo).equals(BigInteger.ZERO))
-        			node.setIsReturn(true);
-        	}
-    	}		
+    	// If there are no pair seeds
+    	if (!selected)   	
+    		paths.get(0).setIsReturn(true);   		  	   		
     }
     
     // Select a node to return from the visitedNodes Hash
     public Node selectVisitedNode(Node returnPath)
     {
-    	BigInteger divisorFive = BigInteger.valueOf(5);
-    	int remainder = returnPath.getSeed().mod(divisorFive).intValue(); // value from 0 to 4
-    	int key = 0;
+    	BigInteger divisorFive = BigInteger.valueOf(4);
+    	int remainder = returnPath.getSeed().mod(divisorFive).intValue(); // value from 0 to 3
+    	int key = remainder + 1;
     	Node nodeToReturn = null;
-    	
-    	switch (remainder) // Selects level to return to
-    	{
-	    	case 0:
-	    		key = 1;
-	    		break;
-	    		
-	    	case 1:
-	    		key = 1;
-	    		break;
-	    		
-	    	case 2:
-	    		key = 2;
-	    		break;
-	    		
-	    	case 3:
-	    		key = 3;
-	    		break;
-	    		
-	    	case 4:
-	    		key = 4;
-	    		break;
-    	}
     	
     	Collection <Node> nodes = visitedNodes.get(key);
     	
