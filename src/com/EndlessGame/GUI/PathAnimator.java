@@ -59,7 +59,7 @@ public class PathAnimator extends Thread{
 			}
 			
 			// Verify collision and select new currentNode and visit it
-			isTeletransporterCollision();
+			checkTeletransporterCollision();
 			// currentNode = el node que indica la colisión
 			pathGraph.visitIntersection(currentNode);		
 			
@@ -111,24 +111,28 @@ public class PathAnimator extends Thread{
 		
 		background.setEnemiesAmount(enemiesNumb);
 	}
+	
 	public void activateTeletransporters(){
 
-		background.setTeletransportersAmount(2/*currentNode.getNextArcs().size()*/);  ///////////Indicar cantidad de Intersecciones
+		background.setTeletransportersAmount(3/*currentNode.getNextArcs().size()*/);  ///////////Indicar cantidad de Intersecciones
 		seconds = 0;
 	}
 	
-	protected void isTeletransporterCollision(){
+	protected void checkTeletransporterCollision(){
+		
 		boolean collition = false;
 		Vehicle vehicle = background.getVehicle();
-
-		for (Teletransporter teletransporter : background.getTeletransporters()){
-			collition = teletransporter.getCoordX() < vehicle.getCoordX() &&
-						vehicle.getCoordX() > teletransporter.getCoordX() + teletransporter.getWidth() && 
-						teletransporter.getCoordY() > vehicle.getCoordY() && 
-						vehicle.getCoordY() < teletransporter.getCoordY() + teletransporter.getHeight();
+		Teletransporter teletransporter;
+		
+		for (int index = 0; index < background.getTeletransporters().size(); index++){
+			teletransporter = background.getTeletransporters().get(index);
+			collition = vehicle.getCoordX() <= teletransporter.getCoordX() + teletransporter.getWidth()&&
+						vehicle.getCoordX()+vehicle.getWidth() >= teletransporter.getCoordX() && 
+					    vehicle.getCoordY()+vehicle.getHeight() >= teletransporter.getCoordY() && 
+						vehicle.getCoordY() <= teletransporter.getCoordY() + teletransporter.getHeight();
 			if(collition){
 				teletransport();
-				System.out.println(collition);
+				System.out.println("ESCOGIDO: "+(index+1));
 				break;
 			}
 		}		
@@ -142,7 +146,7 @@ public class PathAnimator extends Thread{
 		background.setTeletransportersAmount(-1);
 		background.clearTeletransporters();
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

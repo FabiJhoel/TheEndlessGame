@@ -21,9 +21,12 @@ public class BackGroundMoveable extends View{
 	private ArrayList<Teletransporter> teletransporters;
 	private int teletransportersAmount;
 	private Vehicle vehicle;
-	private Enemy enemy;
 	private ArrayList<Enemy> enemies;
 	private int enemiesAmount;
+	
+	private final float offset = (float)0.3478260869;
+	private final float density = getResources().getDisplayMetrics().density;
+	private final float leftRoadLimit = (float)(80-(80*offset))*density;
 	
 	public BackGroundMoveable(Context context) {
 		super(context);
@@ -80,22 +83,23 @@ public class BackGroundMoveable extends View{
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 		//return super.onTouchEvent(event);
+		
 		int eventId = event.getAction();
 		float coordX = event.getX();
 		float coordY = event.getY();
-		int laneWidth = 145;
-		int leftPathLimit = 860;
-		int rigthPathLimit = 130;
+		float laneWidth = (float)(115-(115*offset))*density;  //(dpi-(dpi*offset))*density
+		float rigthPathLimit = (float)(650-(650*offset))*density;
+		float leftPathLimit = (float)(80-(80*offset))*density;
 		
 		switch(eventId){
 			case MotionEvent.ACTION_DOWN: //this motion event prevents undesirable touches
 				if(coordX > vehicle.getCoordX()){
-					if((vehicle.getCoordX()+laneWidth)<=leftPathLimit)
-						vehicle.setCoordX(vehicle.getCoordX()+laneWidth);
+					if((vehicle.getCoordX()+laneWidth)<=rigthPathLimit)
+						vehicle.setCoordX((int)(vehicle.getCoordX()+laneWidth));
 				}
 				else if(coordX < vehicle.getCoordX()){
-					if ((vehicle.getCoordX()-laneWidth) >= rigthPathLimit)
-						vehicle.setCoordX(vehicle.getCoordX()-laneWidth);
+					if ((vehicle.getCoordX()-laneWidth) >= leftPathLimit)
+						vehicle.setCoordX((int)(vehicle.getCoordX()-laneWidth));
 				}
 				break;
 		}
@@ -144,6 +148,61 @@ public class BackGroundMoveable extends View{
 		}
 	}
 
+	public void addTeletransporters(){
+		switch(teletransportersAmount){
+		case 2:
+			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel2),speed,(int)leftRoadLimit));
+			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel3),speed,(int)leftRoadLimit));
+			Teletransporter.setLeftRoadLimit(-1);
+			break;
+		case 3:
+			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel2),speed,(int)leftRoadLimit));
+			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel1),speed,(int)leftRoadLimit));
+			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel2),speed,(int)leftRoadLimit));
+			Teletransporter.setLeftRoadLimit(-1);
+			break;
+		}
+	}
+	
+	public void clearTeletransporters(){
+		//setTeletransportersAmount(-1);
+
+		for (int index = teletransporters.size()-1; index >= 0; index--){
+			teletransporters.remove(index);
+		}
+	}
+	
+	public void addEnemies(){
+		switch(enemiesAmount)
+		{		
+		case 1:
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			//Enemy.setLeftRoadLimit(220);
+			Enemy.setTopRoadLimit(-108);
+			break;
+		case 2:
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			//Enemy.setLeftRoadLimit(220);
+			Enemy.setTopRoadLimit(-108);
+			break;
+		case 3:
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
+			//Enemy.setLeftRoadLimit(220);
+			Enemy.setTopRoadLimit(-108);
+			break;
+		}
+	}
+	
+	public void clearEnemies(){
+		for (int index = 0; index < enemies.size(); index++){
+			enemies.remove(0);
+		}
+	}
+	
+	
 	//Getter and Setter
 	public Bitmap getMainPath() {
 		return mainPath;
@@ -217,56 +276,12 @@ public class BackGroundMoveable extends View{
 		this.enemiesAmount = enemiesAmount;
 	}
 
-	public void addTeletransporters(){
-		switch(teletransportersAmount){
-		case 2:
-			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel2),speed));
-			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel3),speed));
-			Teletransporter.setLeftRoadLimit(110);
-			break;
-		case 3:
-			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel2),speed));
-			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel1),speed));
-			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel2),speed));
-			Teletransporter.setLeftRoadLimit(110);
-			break;
-		}
+	public float getDensity() {
+		return density;
 	}
-	
-	public void clearTeletransporters(){
-		for (int index = 0; index < teletransporters.size(); index++){
-			teletransporters.remove(0);
-		}
-	}
-	
-	public void addEnemies(){
-		switch(enemiesAmount)
-		{		
-		case 1:
-			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			//Enemy.setLeftRoadLimit(220);
-			Enemy.setTopRoadLimit(-108);
-			break;
-		case 2:
-			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			//Enemy.setLeftRoadLimit(220);
-			Enemy.setTopRoadLimit(-108);
-			break;
-		case 3:
-			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			//Enemy.setLeftRoadLimit(220);
-			Enemy.setTopRoadLimit(-108);
-			break;
-		}
-	}
-	
-	public void clearEnemies(){
-		for (int index = 0; index < enemies.size(); index++){
-			enemies.remove(0);
-		}
+
+	public float getLeftRoadLimit() {
+		return leftRoadLimit;
 	}
 
 }

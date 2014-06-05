@@ -9,7 +9,7 @@ import android.graphics.Rect;
 public class Teletransporter{
 	
 	Bitmap teletImage;
-	private static int leftRoadLimit = 110;
+	private static int leftRoadLimit = -1;
 	private int width;
 	private int height;
 	private int speed;
@@ -17,15 +17,19 @@ public class Teletransporter{
 	private int coordY;
 	BackGroundMoveable background;
 
-	public Teletransporter(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed) {
+	public Teletransporter(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed, int pLeftRoadLimit) {
 		this.background = pBackground;
 		teletImage = pImage;
 		width = pImage.getWidth();
 		height = pImage.getHeight();
 		speed = pSpeed;
-		coordX = leftRoadLimit; 
+		
+		if (leftRoadLimit == -1)
+			leftRoadLimit = pLeftRoadLimit;
+			
+		coordX = (int)leftRoadLimit; 
 		coordY = -height;
-        leftRoadLimit = leftRoadLimit+width;
+		leftRoadLimit = leftRoadLimit+width;
 	}
 
 	protected void drawTeletransporter(Canvas canvas) {
@@ -44,7 +48,7 @@ public class Teletransporter{
 		this.speed = speed;
 	}
 
-	public static int getLeftRoadLimit() {
+	public static float getLeftRoadLimit() {
 		return leftRoadLimit;
 	}
 
