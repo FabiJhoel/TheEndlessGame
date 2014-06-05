@@ -13,24 +13,17 @@ public class PathAnimator extends Thread{
 	private MainScreen mainScreen;
 	private BackGroundMoveable background;
 	private PathGraph pathGraph;
-	private Node currentNode;
 	
 	public PathAnimator(MainScreen pMainScreen)
-	{
-		// Logical path
-		pathGraph = new PathGraph();
-		
-		// Load 4 levels and set initial position
-		currentNode = pathGraph.setInitialIntersection();	
-		
-		pathGraph.generateLevel();// Children of initial node
-		pathGraph.generateLevel();
-		pathGraph.generateLevel(); 
-		
-		pathGraph.visitIntersection(currentNode);
-				
+	{				
 		this.mainScreen = pMainScreen;
 		this.speed = seconds = 0;
+		
+		pathGraph = new PathGraph();
+		pathGraph.setInitialIntersection();
+		pathGraph.generateLevel();
+		
+		
 		background = new BackGroundMoveable(mainScreen);
 		putBackground();
 	}
@@ -43,36 +36,22 @@ public class PathAnimator extends Thread{
 				increaseSpeed();
 				
 				if (seconds == 25)
-				{
 					activateEnemies();
-				}
 			}
 			else
-			{	//Verify if currentNode is a return path
-				if (currentNode.getIsReturn())
-					currentNode = pathGraph.selectVisitedNode(currentNode);
-				
+			{	
 				activateTeletransporters();
-
-				// Generate new level
-				pathGraph.generateLevel(); 
 			}
 			
 			// Verify collision and select new currentNode and visit it
 			checkTeletransporterCollision();
-			// currentNode = el node que indica la colisión
-			pathGraph.visitIntersection(currentNode);		
-			
-			
-			
+	
 			try 
 			{
 				Thread.sleep(200);
-			} 
-			
+			}
 			catch (InterruptedException e1) 
-			{
-				// TODO Auto-generated catch block				
+			{			
 				e1.printStackTrace();
 			}
 			
@@ -81,7 +60,7 @@ public class PathAnimator extends Thread{
 	}
 	
 	public void increaseSpeed(){
-		if(speed<6){
+		if(speed<12){
 			speed++;
 			background.setSpeed(speed);
 			try {
@@ -114,8 +93,9 @@ public class PathAnimator extends Thread{
 	
 	public void activateTeletransporters(){
 
-		background.setTeletransportersAmount(3/*currentNode.getNextArcs().size()*/);  ///////////Indicar cantidad de Intersecciones
-		seconds = 0;
+		System.out.println("SEMILLA: "+pathGraph.getCurrentNode().getSeed()+" #HIJOS: "+pathGraph.getCurrentNode().getRealArcs().size());
+		background.setTeletransportersAmount(pathGraph.getCurrentNode().getRealArcs().size());  ///////////Indicar cantidad de Intersecciones
+		seconds = 0;		
 	}
 	
 	protected void checkTeletransporterCollision(){
@@ -132,7 +112,13 @@ public class PathAnimator extends Thread{
 						vehicle.getCoordY() <= teletransporter.getCoordY() + teletransporter.getHeight();
 			if(collition){
 				teletransport();
+				
 				System.out.println("ESCOGIDO: "+(index+1));
+				pathGraph.setCurrentNode(pathGraph.getCurrentNode().getRealArcs().get(index));
+				
+				//generate new level
+				pathGraph.generateLevel();
+				
 				break;
 			}
 		}		

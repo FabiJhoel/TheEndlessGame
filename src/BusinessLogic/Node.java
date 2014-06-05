@@ -5,7 +5,6 @@ import java.math.BigInteger;
 
 public class Node {
 	
-	private static long nodeCounter = 1L;
 	private long id;
 	private BigInteger seed; // intersection number
 	private int level;
@@ -17,15 +16,14 @@ public class Node {
 	private Billboard billboard;
 	private SeedOperator seedOp = SeedOperator.getInstance();
 	
-	public Node(BigInteger pSeed, int pLevel, String pName){
+	public Node(BigInteger pSeed, int pLevel, String pName, long pId){
 		
-		id = nodeCounter;
+		id = pId;
 		seed = pSeed;
 		level = pLevel;
 		name = pName;
 		visited = false;
 		isReal = false;
-		nodeCounter ++;
 	}
 	
 	/*public void prueba()
@@ -104,23 +102,20 @@ public class Node {
 	public ArrayList<Node> getNextArcs() {
 		return nextArcs;
 	}
-
-	public void addNextArc(Node nextArc) {
-		
-		if (findArc(nextArc) == -1)
-			nextArcs.add(nextArc);
+	
+	public ArrayList<Node> getRealArcs() {
+		ArrayList<Node> realArcs = new ArrayList<Node>();
+		for(Node arc : nextArcs){
+			if (arc.isReal)
+				realArcs.add(arc);
+		}
+		return realArcs;
 	}
 
-	public int findArc(Node pNode){
-		
-        for (int cont = 0; cont < nextArcs.size(); cont++) 
-        {
-            if (pNode.seed == nextArcs.get(cont).seed)
-                return cont;
-        }
-        
-        return -1;
-    }	
+	public void addNextArc(Node nextArc) 
+	{
+		nextArcs.add(nextArc);
+	}	
 	
 	 public int assignLevel(int parentLevel)
     {
@@ -150,8 +145,7 @@ public class Node {
 			 currentNodeLevel --;
 			 
 			 // Create parent
-			 Node parent = new Node(seedOp.getSpecificSeed(currentNodeId), currentNodeLevel, "");
-			 parent.setId(currentNodeId);
+			 Node parent = new Node(seedOp.getSpecificSeed(currentNodeId), currentNodeLevel, "", currentNodeId);
 			 parents.add(parent);	
 			 //System.out.println("PADRE : " + n.getId() + " " + n.getSeed());
 		 }
@@ -161,34 +155,34 @@ public class Node {
 	
 	public void generateAdjacents()
 	{
-		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed);
-		BigInteger childrenSeed = null; 
+		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed.add(BigInteger.valueOf(id)));	
+		BigInteger childrenSeed = seedOp.getNewSeed(); 
+		long childrenId = 0;
 		
-		if(this.isReal)
-			System.out.println("PADRE #" + seed + " Nivel: " + level);
+		/*if(this.isReal)
+			System.out.println("PADRE #" + seed + " Nivel: " + level);*/
 		
 		// Create always 3 children (not necessarily all real)
-		for (int contChildren = 0; contChildren < 3; contChildren++)
-		{		
-			childrenSeed = seedOp.getNewSeed();			
-			Node children = new Node(childrenSeed, assignLevel(level), "");
-			
-			if (this.isReal) // Real parent
+		for (int contChildren = -1; contChildren < 2; contChildren++)
+		{					
+			childrenId = 3*id + contChildren;
+			Node children = new Node(childrenSeed, assignLevel(level), "", childrenId);
+
+			if (numbOfChildren != 0) // Real children
 			{
-				if (numbOfChildren != 0) // Real children
-				{
-					children.isReal = true;
-					numbOfChildren --;
-				}
+				children.isReal = true;
+				numbOfChildren --;
 			}
-						
+	
 			addNextArc(children);
 		}
 		
+		//System.out.println("PADRE #" + seed + " HIJOS REALES: " + getRealArcs().size());
+		
 		for (Node c : getNextArcs())
 		{
-			if (c.isReal)
-				System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());
+			/*if (c.isReal)
+				System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());*/
 		}
 	}
 	

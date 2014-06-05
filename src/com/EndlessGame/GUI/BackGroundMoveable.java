@@ -150,6 +150,10 @@ public class BackGroundMoveable extends View{
 
 	public void addTeletransporters(){
 		switch(teletransportersAmount){
+		case 1:
+			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel5),speed,(int)leftRoadLimit));
+			Teletransporter.setLeftRoadLimit(-1);
+			break;
 		case 2:
 			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel2),speed,(int)leftRoadLimit));
 			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel3),speed,(int)leftRoadLimit));
@@ -197,8 +201,8 @@ public class BackGroundMoveable extends View{
 	}
 	
 	public void clearEnemies(){
-		for (int index = 0; index < enemies.size(); index++){
-			enemies.remove(0);
+		for (int index = enemies.size()-1; index >= 0; index--){
+			enemies.remove(index);
 		}
 	}
 	

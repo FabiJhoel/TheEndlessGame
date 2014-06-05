@@ -53,13 +53,13 @@ public class SeedOperator {
 		BigInteger divisorThree = BigInteger.valueOf(3);
 		
 		if (parentSeed.mod(divisorTwo).equals(BigInteger.ZERO)) 
-			return 1;
+			return 3;
 		
 		if (parentSeed.mod(divisorThree).equals(BigInteger.ZERO)) 
-			return 2;
+			return 1;
 		
 		else 
-			return 3;
+			return 2;
 
     }
 	
@@ -71,20 +71,4 @@ public class SeedOperator {
     	
     	return seed;
     }
-	
-	/*public static BigInteger getSquareRoot(BigInteger n) 
-	{
-        BigInteger a = BigInteger.ONE;
-        BigInteger b = new BigInteger(n.shiftRight(5).add(new BigInteger("8")).toString());
-        
-        while(b.compareTo(a) >= 0) 
-        {
-          BigInteger mid = new BigInteger(a.add(b).shiftRight(1).toString());
-          if(mid.multiply(mid).compareTo(n) > 0) b = mid.subtract(BigInteger.ONE);
-          else a = mid.add(BigInteger.ONE);
-        }
-        
-        return a.subtract(BigInteger.ONE);
-      }*/
-
 }

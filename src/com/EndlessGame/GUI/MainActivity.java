@@ -21,27 +21,27 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //No Title
 		setContentView(R.layout.main_menu);
 
-		PathGraph pg = new PathGraph();
+		/*PathGraph pg = new PathGraph();*/
 		        
-	        BigInteger seed = BigInteger.valueOf(6);
+	       /* BigInteger seed = BigInteger.valueOf(6);
 	        Node primero = new Node(seed,1,""); 
 	        primero.setId(9);
 	        primero.setLevel(3);
-	        /*primero.generateAdjacents();
+	        primero.generateAdjacents();
 	        Node prueba = null;
 	        
 	        for (Node n : primero.getNextArcs())
 	        {
 	        	n.generateAdjacents();
 	        	prueba = n;
-	        }*/
+	        }
 	        
 	        ArrayList<Node> padres = primero.getAllParents();
 	        
 	        for (Node n : padres)
 	        {
 	        	System.out.println("PADRE : " + n.getId() + " " + n.getSeed());
-	        }
+	        }*/
 
 	       
 	        

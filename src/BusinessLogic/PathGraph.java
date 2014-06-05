@@ -9,9 +9,17 @@ import java.util.Collection;
 
 public class PathGraph {
 	
-	private ArrayList <Node> currentParents = new ArrayList<Node>();
 	private static Multimap<Integer, Node> visitedNodes = HashMultimap.create();
+	private Node currentNode;
 	
+	public Node getCurrentNode() {
+		return currentNode;
+	}
+
+	public void setCurrentNode(Node currentNode) {
+		this.currentNode = currentNode;
+	}
+
 	// Looks for a node in the visitedNodes Hash
 	public Boolean findVisitedNode(Node pNode)
 	{
@@ -42,42 +50,25 @@ public class PathGraph {
 		}
 	}
 
-    public Node setInitialIntersection()
+    public void setInitialIntersection()
     {
     	BigInteger initialSeed = BigInteger.valueOf(6);
-    	Node initialNode = new Node(initialSeed, 1, "");
+    	Node initialNode = new Node(initialSeed, 1, "", 1);
     	initialNode.setIsReal(true);
-    	currentParents.add(initialNode);
-    	
-    	return initialNode;
+    	currentNode = initialNode;
+
     }
     
     public void generateLevel()
     {
     	try {
-    		
-	    	ArrayList <Node> newParents = new ArrayList<Node>();
-	
-	    	for (Node parent : currentParents)
-	    	{
-	    		parent.generateAdjacents();
-	    		   	
-	    		// Set new parents
-	    		for (Node child : parent.getNextArcs())
-	    		{   			
-	    			newParents.add(child);	
-	    		}
-	    		
-	    		// Determine return path
-	    		if (parent.getLevel() == 3)
-	    		{
-	    			setReturnPath(parent.getNextArcs());
-	    		}		
-	    	}
-	    	
-	    	// New generation of parents
-	    	currentParents.clear();
-	    	currentParents = newParents;
+    		currentNode.generateAdjacents();
+	   		
+    		// Determine return path
+    		if (currentNode.getLevel() == 3)
+    		{
+    			setReturnPath(currentNode.getNextArcs());
+    		}		  
     	}
     	
     	catch(Exception e)
