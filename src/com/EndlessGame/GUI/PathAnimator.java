@@ -125,7 +125,7 @@ public class PathAnimator extends Thread{
 				{
 					pathGraph.loadHashVisitedNodes(pathGraph.getCurrentNode());
 					pathGraph.setCurrentNode(pathGraph.selectVisitedNode(pathGraph.getCurrentNode()));
-					System.out.println("SI SE DEVOLVIO: "+pathGraph.getCurrentNode().getId() +" SEMILLA: "+pathGraph.getCurrentNode().getSeed());
+					System.out.println("SI SE DEVOLVIO: "+pathGraph.getCurrentNode().getId() +" SEMILLA: "+pathGraph.getCurrentNode().getSeed() + " HIJOS: " + pathGraph.getCurrentNode().getRealArcs().size());
 					pathGraph.getCurrentNode().getSeedOp().setInitialSeed(pathGraph.getCurrentNode().getSeed());
 				}
 				

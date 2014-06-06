@@ -36,6 +36,8 @@ public class PathGraph {
 
 	public void loadHashVisitedNodes(Node isReturnNode)
 	{
+		visitedNodes.clear();
+		
 		// Get all parents
 		ArrayList<Node> parents = isReturnNode.getAllParents();
 		
