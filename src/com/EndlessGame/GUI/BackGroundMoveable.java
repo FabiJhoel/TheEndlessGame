@@ -8,8 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,6 +21,8 @@ public class BackGroundMoveable extends View{
 	private Vehicle vehicle;
 	private ArrayList<Enemy> enemies;
 	private int enemiesAmount;
+	private Billboard billboard;
+	private int billboardAmount;
 	
 	private final float offset = (float)0.3478260869;
 	private final float density = getResources().getDisplayMetrics().density;
@@ -41,6 +41,8 @@ public class BackGroundMoveable extends View{
 		vehicle = new Vehicle(this, BitmapFactory.decodeResource(getResources(), R.drawable.car3));
 		enemies = new ArrayList<>();
 		enemiesAmount = -1;
+		billboard = null;
+		billboardAmount = -1;
 	}
 	
 	@Override
@@ -71,6 +73,7 @@ public class BackGroundMoveable extends View{
 		}
 		
 		if (warp == false){
+			drawBillboard(canvas);
 			drawTeletransporters(canvas);
 			drawVehicle(canvas);
 			drawEnemy(canvas);
@@ -86,7 +89,6 @@ public class BackGroundMoveable extends View{
 		
 		int eventId = event.getAction();
 		float coordX = event.getX();
-		float coordY = event.getY();
 		float laneWidth = (float)(115-(115*offset))*density;  //(dpi-(dpi*offset))*density
 		float rigthPathLimit = (float)(650-(650*offset))*density;
 		float leftPathLimit = (float)(80-(80*offset))*density;
@@ -107,6 +109,7 @@ public class BackGroundMoveable extends View{
 	}
 
 	protected void drawTeletransporters(Canvas canvas){
+		
 		if (teletransportersAmount == -1)
 		{	
 			for (Teletransporter teletranspoter : teletransporters)
@@ -121,6 +124,22 @@ public class BackGroundMoveable extends View{
 			clearTeletransporters();
 			addTeletransporters();
 			teletransportersAmount = -1;	
+		}
+	}
+	
+	protected void drawBillboard(Canvas canvas)
+	{			
+		if (billboardAmount == -1)
+		{	
+			if (billboard != null)
+				billboard.drawBillboard(canvas);
+		}
+		
+		else
+		{
+			clearBillboard();
+			addNewBillboard();
+			billboardAmount = -1;	
 		}
 	}
 	
@@ -148,7 +167,8 @@ public class BackGroundMoveable extends View{
 		}
 	}
 
-	public void addTeletransporters(){
+	public void addTeletransporters()
+	{
 		switch(teletransportersAmount){
 		case 1:
 			teletransporters.add(new Teletransporter(this,BitmapFactory.decodeResource(getResources(), R.drawable.tunel5),speed,(int)leftRoadLimit));
@@ -168,7 +188,8 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	public void clearTeletransporters(){
+	public void clearTeletransporters()
+	{
 		//setTeletransportersAmount(-1);
 
 		for (int index = teletransporters.size()-1; index >= 0; index--){
@@ -176,7 +197,8 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	public void addEnemies(){
+	public void addEnemies()
+	{
 		switch(enemiesAmount)
 		{		
 		case 1:
@@ -200,12 +222,23 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	public void clearEnemies(){
+	public void clearEnemies()
+	{
 		for (int index = enemies.size()-1; index >= 0; index--){
 			enemies.remove(index);
 		}
 	}
 	
+	public void addNewBillboard()
+	{
+		if (billboardAmount == 1)
+			billboard = new Billboard(this, BitmapFactory.decodeResource(getResources(), R.drawable.billboard), speed);
+	}
+	
+	public void clearBillboard()
+	{
+		billboard = null;
+	}
 	
 	//Getter and Setter
 	public Bitmap getMainPath() {
@@ -216,7 +249,7 @@ public class BackGroundMoveable extends View{
 		this.mainPath = mainPath;
 	}
 
-	public boolean isWarp() {
+	public boolean getWarp() {
 		return warp;
 	}
 
@@ -288,4 +321,18 @@ public class BackGroundMoveable extends View{
 		return leftRoadLimit;
 	}
 
+	public void setBillboard(Billboard pBillboard)
+	{
+		billboard = pBillboard;
+	}
+
+	
+	public int getBillboardAmount() {
+		return billboardAmount;
+	}
+
+	public void setBillboardAmount(int billboardAmount) {
+		this.billboardAmount = billboardAmount;
+	}
+	
 }

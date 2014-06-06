@@ -53,13 +53,13 @@ public class SeedOperator {
 		BigInteger divisorThree = BigInteger.valueOf(3);
 		
 		if (parentSeed.mod(divisorTwo).equals(BigInteger.ZERO)) 
-			return 3;
-		
-		if (parentSeed.mod(divisorThree).equals(BigInteger.ZERO)) 
 			return 1;
 		
-		else 
+		if (parentSeed.mod(divisorThree).equals(BigInteger.ZERO)) 
 			return 2;
+		
+		else 
+			return 3;
 
     }
 	

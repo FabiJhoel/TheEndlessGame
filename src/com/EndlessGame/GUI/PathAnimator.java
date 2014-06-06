@@ -60,7 +60,7 @@ public class PathAnimator extends Thread{
 	}
 	
 	public void increaseSpeed(){
-		if(speed<12){
+		if(speed<8){
 			speed++;
 			background.setSpeed(speed);
 			try {
@@ -74,28 +74,32 @@ public class PathAnimator extends Thread{
 	}
 	
 	public void activateEnemies()
-	{
-		int enemiesNumb = 0;  
-		
-		for (int i = 0; i<10; i++)
-        {   
-			enemiesNumb = 0;                      
-            Random randomGenerator = new Random();
-            
-            while (enemiesNumb == 0)
-            {
-                enemiesNumb = randomGenerator.nextInt(4);
-            }
-        }
-		
+	{              
+        Random randomGenerator = new Random();
+        int enemiesNumb = randomGenerator.nextInt(3) +1;
 		background.setEnemiesAmount(enemiesNumb);
 	}
 	
 	public void activateTeletransporters(){
 
 		System.out.println("SEMILLA: "+pathGraph.getCurrentNode().getSeed()+" #HIJOS: "+pathGraph.getCurrentNode().getRealArcs().size());
+		activateBillboard();
 		background.setTeletransportersAmount(pathGraph.getCurrentNode().getRealArcs().size());  ///////////Indicar cantidad de Intersecciones
 		seconds = 0;		
+	}
+	
+	public void activateBillboard()
+	{
+		background.setBillboardAmount(1);
+		try 
+		{
+			Thread.sleep(500);
+		}
+		catch (InterruptedException e1) 
+		{			
+			e1.printStackTrace();
+		}
+		
 	}
 	
 	protected void checkTeletransporterCollision(){
@@ -110,11 +114,17 @@ public class PathAnimator extends Thread{
 						vehicle.getCoordX()+vehicle.getWidth() >= teletransporter.getCoordX() && 
 					    vehicle.getCoordY()+vehicle.getHeight() >= teletransporter.getCoordY() && 
 						vehicle.getCoordY() <= teletransporter.getCoordY() + teletransporter.getHeight();
-			if(collition){
+			if(collition)
+			{
 				teletransport();
 				
 				System.out.println("ESCOGIDO: "+(index+1));
 				pathGraph.setCurrentNode(pathGraph.getCurrentNode().getRealArcs().get(index));
+				
+				if (pathGraph.getCurrentNode().getIsReturn())
+				{
+					pathGraph.loadHashVisitedNodes(pathGraph.getCurrentNode());
+				}
 				
 				//generate new level
 				pathGraph.generateLevel();
@@ -129,8 +139,10 @@ public class PathAnimator extends Thread{
 		background.setWarp(true);
 		background.setMainPath(background.getWarpPath());
 		background.setSpeed(warpSpeed);
-		background.setTeletransportersAmount(-1);
-		background.clearTeletransporters();
+		background.setTeletransportersAmount(0);
+		background.setBillboardAmount(0);
+		/*background.clearBillboard();
+		background.clearTeletransporters();*/
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {

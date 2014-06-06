@@ -155,8 +155,8 @@ public class Node {
 	
 	public void generateAdjacents()
 	{
-		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed.add(BigInteger.valueOf(id)));	
-		BigInteger childrenSeed = seedOp.getNewSeed(); 
+		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed);	
+		BigInteger childrenSeed = null; 
 		long childrenId = 0;
 		
 		/*if(this.isReal)
@@ -165,6 +165,7 @@ public class Node {
 		// Create always 3 children (not necessarily all real)
 		for (int contChildren = -1; contChildren < 2; contChildren++)
 		{					
+			childrenSeed = seedOp.getNewSeed();
 			childrenId = 3*id + contChildren;
 			Node children = new Node(childrenSeed, assignLevel(level), "", childrenId);
 
