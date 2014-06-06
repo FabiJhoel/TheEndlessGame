@@ -82,7 +82,7 @@ public class PathAnimator extends Thread{
 	
 	public void activateTeletransporters(){
 
-		System.out.println("SEMILLA: "+pathGraph.getCurrentNode().getSeed()+" #HIJOS: "+pathGraph.getCurrentNode().getRealArcs().size());
+		System.out.println("ID: "+pathGraph.getCurrentNode().getId()+" #HIJOS: "+pathGraph.getCurrentNode().getRealArcs().size());
 		activateBillboard();
 		background.setTeletransportersAmount(pathGraph.getCurrentNode().getRealArcs().size());  ///////////Indicar cantidad de Intersecciones
 		seconds = 0;		
@@ -124,6 +124,8 @@ public class PathAnimator extends Thread{
 				if (pathGraph.getCurrentNode().getIsReturn())
 				{
 					pathGraph.loadHashVisitedNodes(pathGraph.getCurrentNode());
+					pathGraph.setCurrentNode(pathGraph.selectVisitedNode(pathGraph.getCurrentNode()));
+					System.out.println("SI SE DEVOLVIO: "+pathGraph.getCurrentNode().getId());
 				}
 				
 				//generate new level
