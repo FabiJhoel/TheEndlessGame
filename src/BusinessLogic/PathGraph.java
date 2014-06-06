@@ -92,6 +92,7 @@ public class PathGraph {
     		{
     			node.setIsReturn(true);
     			selected = true;
+    			break;
     		}
     	}
     	

@@ -13,6 +13,7 @@ public class PathAnimator extends Thread{
 	private MainScreen mainScreen;
 	private BackGroundMoveable background;
 	private PathGraph pathGraph;
+	private boolean teletransCollision;
 	
 	public PathAnimator(MainScreen pMainScreen)
 	{				
@@ -23,9 +24,9 @@ public class PathAnimator extends Thread{
 		pathGraph.setInitialIntersection();
 		pathGraph.generateLevel();
 		
-		
 		background = new BackGroundMoveable(mainScreen);
 		putBackground();
+		teletransCollision = false;
 	}
 	
 	public void run(){
@@ -38,13 +39,12 @@ public class PathAnimator extends Thread{
 				if (seconds == 25)
 					activateEnemies();
 			}
-			else
-			{	
+			else	
 				activateTeletransporters();
-			}
-			
+					
 			// Verify collision and select new currentNode and visit it
-			checkTeletransporterCollision();
+			if (teletransCollision)
+				checkTeletransporterCollision();
 	
 			try 
 			{
@@ -80,12 +80,19 @@ public class PathAnimator extends Thread{
 		background.setEnemiesAmount(enemiesNumb);
 	}
 	
-	public void activateTeletransporters(){
+	public void activateTeletransporters()
+	{
 
-		System.out.println("ID: "+pathGraph.getCurrentNode().getId() + "SEED: "+pathGraph.getCurrentNode().getSeed() +" #HIJOS: "+pathGraph.getCurrentNode().getRealArcs().size());
+		//System.out.println("ID: "+pathGraph.getCurrentNode().getId() + "SEED: "+pathGraph.getCurrentNode().getSeed() + " NIVEL: " + pathGraph.getCurrentNode().getLevel());
+		for (Node n : pathGraph.getCurrentNode().getRealArcs())
+		{
+			System.out.println("Hijo: " + n.getId() + " RETURN: " + n.getIsReturn());
+		}
+		
 		activateBillboard();
 		background.setTeletransportersAmount(pathGraph.getCurrentNode().getRealArcs().size());  ///////////Indicar cantidad de Intersecciones
-		seconds = 0;		
+		seconds = 0;	
+		teletransCollision = true;
 	}
 	
 	public void activateBillboard()
@@ -130,7 +137,10 @@ public class PathAnimator extends Thread{
 				}
 				
 				//generate new level
-				pathGraph.generateLevel();
+				pathGraph.generateLevel();				
+				
+				// Activate collision
+				teletransCollision = false;
 				
 				break;
 			}
