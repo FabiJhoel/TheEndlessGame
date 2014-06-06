@@ -10,15 +10,6 @@ import java.util.Collection;
 public class PathGraph {
 	
 	private static Multimap<Integer, Node> visitedNodes = HashMultimap.create();
-	private Node currentNode;
-	
-	public Node getCurrentNode() {
-		return currentNode;
-	}
-
-	public void setCurrentNode(Node currentNode) {
-		this.currentNode = currentNode;
-	}
 
 	// Looks for a node in the visitedNodes Hash
 	public Boolean findVisitedNode(Node pNode)
@@ -52,16 +43,15 @@ public class PathGraph {
 		}
 	}
 
-    public void setInitialIntersection()
+    public Node setInitialIntersection()
     {
     	BigInteger initialSeed = BigInteger.valueOf(6);
     	Node initialNode = new Node(initialSeed, 1, "", 1);
     	initialNode.setIsReal(true);
-    	currentNode = initialNode;
-
+    	return initialNode;
     }
     
-    public void generateLevel()
+    public void generateLevel(Node currentNode)
     {
     	try {
     		currentNode.generateAdjacents();

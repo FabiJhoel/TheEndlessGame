@@ -13,7 +13,6 @@ public class Node {
 	private boolean isReturn;
 	private boolean isReal;
 	private ArrayList<Node> nextArcs = new ArrayList<Node>();
-	private Billboard billboard;
 	private SeedOperator seedOp = SeedOperator.getInstance();
 	
 	public Node(BigInteger pSeed, int pLevel, String pName, long pId){
@@ -89,16 +88,6 @@ public class Node {
 		this.isReal = isReal;
 	}
 
-	public Billboard getBillboard()
-	{
-		return this.billboard;
-	}
-	
-	public void setBillboard(Billboard billboard)
-	{
-		this.billboard = billboard;
-	}
-	
 	public ArrayList<Node> getNextArcs() {
 		return nextArcs;
 	}

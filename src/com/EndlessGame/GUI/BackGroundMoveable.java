@@ -1,18 +1,20 @@
 package com.EndlessGame.GUI;
 
 import java.util.ArrayList;
-
 import com.EndlessGame.GUI.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
+import BusinessLogic.PlayerInfo;
 
 public class BackGroundMoveable extends View{
 
+	private final float offset = (float)0.3478260869;
+	private final float density = getResources().getDisplayMetrics().density;
+	private final float leftRoadLimit = (float)(80-(80*offset))*density;
 	private Bitmap mainPath, warpPath, roadPath;
 	private int farY, nearY, speed; 
 	private boolean warp;
@@ -24,9 +26,7 @@ public class BackGroundMoveable extends View{
 	private Billboard billboard;
 	private int billboardAmount;
 	
-	private final float offset = (float)0.3478260869;
-	private final float density = getResources().getDisplayMetrics().density;
-	private final float leftRoadLimit = (float)(80-(80*offset))*density;
+	
 	
 	public BackGroundMoveable(Context context) {
 		super(context);
@@ -333,6 +333,5 @@ public class BackGroundMoveable extends View{
 
 	public void setBillboardAmount(int billboardAmount) {
 		this.billboardAmount = billboardAmount;
-	}
-	
+	}	
 }

@@ -14,6 +14,9 @@ public class PathAnimator extends Thread{
 	private BackGroundMoveable background;
 	private PathGraph pathGraph;
 	private boolean teletransCollision;
+	private Node currentNode;
+
+	private PlayerInfo player;
 	
 	public PathAnimator(MainScreen pMainScreen)
 	{				
@@ -21,12 +24,18 @@ public class PathAnimator extends Thread{
 		this.speed = seconds = 0;
 		
 		pathGraph = new PathGraph();
-		pathGraph.setInitialIntersection();
-		pathGraph.generateLevel();
+		currentNode = pathGraph.setInitialIntersection();
+		pathGraph.generateLevel(currentNode);
 		
 		background = new BackGroundMoveable(mainScreen);
 		putBackground();
+		player = new PlayerInfo("");
 		teletransCollision = false;
+	}
+	
+	public PlayerInfo getPlayer() 
+	{
+		return player;
 	}
 	
 	public void run(){
@@ -82,15 +91,8 @@ public class PathAnimator extends Thread{
 	
 	public void activateTeletransporters()
 	{
-
-		//System.out.println("ID: "+pathGraph.getCurrentNode().getId() + "SEED: "+pathGraph.getCurrentNode().getSeed() + " NIVEL: " + pathGraph.getCurrentNode().getLevel());
-		for (Node n : pathGraph.getCurrentNode().getRealArcs())
-		{
-			System.out.println("Hijo: " + n.getId() + " RETURN: " + n.getIsReturn());
-		}
-		
 		activateBillboard();
-		background.setTeletransportersAmount(pathGraph.getCurrentNode().getRealArcs().size());  ///////////Indicar cantidad de Intersecciones
+		background.setTeletransportersAmount(currentNode.getRealArcs().size()); 
 		seconds = 0;	
 		teletransCollision = true;
 	}
@@ -106,7 +108,6 @@ public class PathAnimator extends Thread{
 		{			
 			e1.printStackTrace();
 		}
-		
 	}
 	
 	protected void checkTeletransporterCollision(){
@@ -126,18 +127,18 @@ public class PathAnimator extends Thread{
 				teletransport();
 				
 				System.out.println("ESCOGIDO: "+(index+1));
-				pathGraph.setCurrentNode(pathGraph.getCurrentNode().getRealArcs().get(index));
+				currentNode = currentNode.getRealArcs().get(index);
 				
-				if (pathGraph.getCurrentNode().getIsReturn())
+				if (currentNode.getIsReturn())
 				{
-					pathGraph.loadHashVisitedNodes(pathGraph.getCurrentNode());
-					pathGraph.setCurrentNode(pathGraph.selectVisitedNode(pathGraph.getCurrentNode()));
-					System.out.println("SI SE DEVOLVIO: "+pathGraph.getCurrentNode().getId() +" SEMILLA: "+pathGraph.getCurrentNode().getSeed() + " HIJOS: " + pathGraph.getCurrentNode().getRealArcs().size());
-					pathGraph.getCurrentNode().getSeedOp().setInitialSeed(pathGraph.getCurrentNode().getSeed());
+					pathGraph.loadHashVisitedNodes(currentNode);
+					currentNode = pathGraph.selectVisitedNode(currentNode);
+					System.out.println("SI SE DEVOLVIO: "+ currentNode.getId() +" SEMILLA: "+ currentNode.getSeed() + " HIJOS: " + currentNode.getRealArcs().size());
+					currentNode.getSeedOp().setInitialSeed(currentNode.getSeed());
 				}
 				
 				//generate new level
-				pathGraph.generateLevel();				
+				pathGraph.generateLevel(currentNode);				
 				
 				// Activate collision
 				teletransCollision = false;
