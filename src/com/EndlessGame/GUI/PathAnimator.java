@@ -5,6 +5,7 @@ import java.util.Random;
 import com.EndlessGame.GUI.R;
 
 import BusinessLogic.*;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 public class PathAnimator extends Thread{
@@ -171,6 +172,8 @@ public class PathAnimator extends Thread{
 	protected void putBackground(){
 		RelativeLayout surface = (RelativeLayout)mainScreen.findViewById(R.id.mainLayout);
 		surface.addView(background);
+		Button button = (Button)mainScreen.findViewById(R.id.button1);
+		button.bringToFront();
 	}
 
 }
