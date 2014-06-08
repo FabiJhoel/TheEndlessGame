@@ -18,8 +18,12 @@ public class PathGraph {
 
         for (Node intersection : nodes) 
         {
-        	if (intersection == pNode)
-        		return true;       	
+        	System.out.println("UNO: "+ intersection.getId() +" OTRO: "+ pNode.getId());
+        	if (intersection.getId() == pNode.getId())
+        	{
+        		System.out.println("SON IGUALES");
+        		return true;
+        	}
         }  
         
         return false;

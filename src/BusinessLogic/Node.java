@@ -25,11 +25,6 @@ public class Node {
 		isReal = false;
 	}
 	
-	/*public void prueba()
-	{
-		System.out.println("SEMILLA: " + seedOp.getSpecificSeed(10L));
-	}*/
-	
 	public long getId()
 	{
 		return id;
@@ -135,8 +130,8 @@ public class Node {
 			 
 			 // Create parent
 			 Node parent = new Node(seedOp.getSpecificSeed(currentNodeId), currentNodeLevel, "", currentNodeId);
+			 parent.setVisited(true);
 			 parents.add(parent);	
-			 //System.out.println("PADRE : " + n.getId() + " " + n.getSeed());
 		 }
 		 		 
 		 return parents;
@@ -144,7 +139,7 @@ public class Node {
 	
 	public void generateAdjacents()
 	{
-		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed);	
+		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed, level);	
 		BigInteger childrenSeed = null; 
 		long childrenId = 0;
 		
@@ -169,11 +164,11 @@ public class Node {
 		
 		//System.out.println("PADRE #" + seed + " HIJOS REALES: " + getRealArcs().size());
 		
-		for (Node c : getNextArcs())
+		/*for (Node c : getNextArcs())
 		{
-			/*if (c.isReal)
-				System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());*/
-		}
+			if (c.isReal)
+				System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());
+		}*/
 	}
 	
 

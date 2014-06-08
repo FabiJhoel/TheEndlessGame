@@ -6,13 +6,53 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/shootButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="115dp"
-        android:layout_marginRight="82dp"
-        android:text="Button" />
+        android:layout_marginBottom="14dp"
+        android:layout_marginRight="76dp"
+        android:text="Shoot" />
+
+    <TextView
+        android:id="@+id/scoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/shootButton"
+        android:layout_alignParentTop="true"
+        android:text="Score:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/pointsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/scoreTextView"
+        android:layout_alignBottom="@+id/scoreTextView"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/livesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/scoreTextView"
+        android:layout_below="@+id/scoreTextView"
+        android:layout_marginTop="16dp"
+        android:text="Lives:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/livesNumbTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/livesTextView"
+        android:layout_alignBottom="@+id/livesTextView"
+        android:layout_alignRight="@+id/pointsTextView"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

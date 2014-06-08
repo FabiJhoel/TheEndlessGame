@@ -7,6 +7,7 @@ import com.EndlessGame.GUI.R;
 import BusinessLogic.*;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class PathAnimator extends Thread{
 	private int speed;
@@ -16,8 +17,10 @@ public class PathAnimator extends Thread{
 	private PathGraph pathGraph;
 	private boolean teletransCollision;
 	private Node currentNode;
-
+	//private TextView pointsTxtView;
+	//private TextView livesNumbTxtView;
 	private PlayerInfo player;
+	
 	
 	public PathAnimator(MainScreen pMainScreen)
 	{				
@@ -29,30 +32,34 @@ public class PathAnimator extends Thread{
 		pathGraph.generateLevel(currentNode);
 		
 		background = new BackGroundMoveable(mainScreen);
-		putBackground();
-		player = new PlayerInfo("");
+		showBackground();
 		teletransCollision = false;
+		
+		player = new PlayerInfo("");
 	}
 	
-	public PlayerInfo getPlayer() 
-	{
+	public PlayerInfo getPlayer() {
 		return player;
 	}
-	
-	public void run(){
+
+	public void run()
+	{
 		boolean stop = false;
-		while(!stop){
+		
+		while(!stop)
+		{
 			if (seconds < 50)
 			{
-				increaseSpeed();
+				increaseSpeed();				
 				
 				if (seconds == 25)
 					activateEnemies();
 			}
+			
 			else	
 				activateTeletransporters();
 					
-			// Verify collision and select new currentNode and visit it
+			// Verify collision
 			if (teletransCollision)
 				checkTeletransporterCollision();
 	
@@ -60,6 +67,7 @@ public class PathAnimator extends Thread{
 			{
 				Thread.sleep(200);
 			}
+			
 			catch (InterruptedException e1) 
 			{			
 				e1.printStackTrace();
@@ -70,17 +78,21 @@ public class PathAnimator extends Thread{
 	}
 	
 	public void increaseSpeed(){
-		if(speed<8){
+		if(speed < 8)
+		{
 			speed++;
 			background.setSpeed(speed);
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e1) {
 			
+			try 
+			{
+				Thread.sleep(500);
+			} 
+			
+			catch (InterruptedException e1) 
+			{			
 				e1.printStackTrace();
 			}
-		}
-		
+		}	
 	}
 	
 	public void activateEnemies()
@@ -100,7 +112,10 @@ public class PathAnimator extends Thread{
 	
 	public void activateBillboard()
 	{
+		background.setIntersectionNumb(currentNode.getSeed().toString());
+		background.setIntersectionName(currentNode.getName());
 		background.setBillboardAmount(1);
+		
 		try 
 		{
 			Thread.sleep(500);
@@ -128,8 +143,9 @@ public class PathAnimator extends Thread{
 				teletransport();
 				
 				System.out.println("ESCOGIDO: "+(index+1));
-				currentNode = currentNode.getRealArcs().get(index);
+				currentNode = currentNode.getRealArcs().get(index);				
 				
+				// Verify if is a return node
 				if (currentNode.getIsReturn())
 				{
 					pathGraph.loadHashVisitedNodes(currentNode);
@@ -137,6 +153,12 @@ public class PathAnimator extends Thread{
 					System.out.println("SI SE DEVOLVIO: "+ currentNode.getId() +" SEMILLA: "+ currentNode.getSeed() + " HIJOS: " + currentNode.getRealArcs().size());
 					currentNode.getSeedOp().setInitialSeed(currentNode.getSeed());
 				}
+				
+				// Accumulate points
+				if (pathGraph.findVisitedNode(currentNode))
+					player.accumulateScore(2);
+				else
+					player.accumulateScore(3);	
 				
 				//generate new level
 				pathGraph.generateLevel(currentNode);				
@@ -148,7 +170,7 @@ public class PathAnimator extends Thread{
 			}
 		}		
 	}
-	
+
 	protected void teletransport(){
 		int warpSpeed = 40;
 		background.setWarp(true);
@@ -169,11 +191,25 @@ public class PathAnimator extends Thread{
 		background.setMainPath(background.getRoadPath());
 	}
 	
-	protected void putBackground(){
+	protected void showBackground()
+	{
 		RelativeLayout surface = (RelativeLayout)mainScreen.findViewById(R.id.mainLayout);
 		surface.addView(background);
-		Button button = (Button)mainScreen.findViewById(R.id.button1);
-		button.bringToFront();
+		
+		Button shootButton = (Button)mainScreen.findViewById(R.id.shootButton);
+		shootButton.bringToFront();
+		
+		TextView scoreTxtView = (TextView)mainScreen.findViewById(R.id.scoreTextView);
+		scoreTxtView.bringToFront();
+		
+		TextView pointsTxtView = (TextView)mainScreen.findViewById(R.id.pointsTextView);
+		pointsTxtView.bringToFront();
+		
+		TextView livesTxtView = (TextView)mainScreen.findViewById(R.id.livesTextView);
+		livesTxtView.bringToFront();
+		
+		TextView livesNumbTxtView = (TextView)mainScreen.findViewById(R.id.livesNumbTextView);
+		livesNumbTxtView.bringToFront();	
 	}
 
 }

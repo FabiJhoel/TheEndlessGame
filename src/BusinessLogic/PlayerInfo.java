@@ -3,7 +3,7 @@ package BusinessLogic;
 public class PlayerInfo {
 	
 	private String Name;
-	private int score;
+	private long score;
 	private int lives;
 	private final int NUMBER_OF_LIVES = 3;
 	
@@ -22,11 +22,11 @@ public class PlayerInfo {
 		Name = name;
 	}
 
-	public int getScore() {
+	public long getScore() {
 		return score;
 	}
 
-	public void setScore(int points) {
+	public void accumulateScore(long points) {
 		this.score += points;
 	}
 

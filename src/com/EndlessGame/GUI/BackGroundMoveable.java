@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
-import BusinessLogic.PlayerInfo;
 
 public class BackGroundMoveable extends View{
 
@@ -25,7 +24,8 @@ public class BackGroundMoveable extends View{
 	private int enemiesAmount;
 	private Billboard billboard;
 	private int billboardAmount;
-	
+	private String intersectionNumb;
+	private String intersectionName;
 	
 	
 	public BackGroundMoveable(Context context) {
@@ -43,8 +43,30 @@ public class BackGroundMoveable extends View{
 		enemiesAmount = -1;
 		billboard = null;
 		billboardAmount = -1;
+		intersectionNumb = "";
+		intersectionName = "";
 	}
 	
+	public String getIntersectionNumb() 
+	{
+		return intersectionNumb;
+	}
+
+	public void setIntersectionNumb(String intersectionNumb)
+	{
+		this.intersectionNumb = intersectionNumb;
+	}
+
+	public String getIntersectionName()
+	{
+		return intersectionName;
+	}
+
+	public void setIntersectionName(String intersectionName)
+	{
+		this.intersectionName = intersectionName;
+	}
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
@@ -132,7 +154,7 @@ public class BackGroundMoveable extends View{
 		if (billboardAmount == -1)
 		{	
 			if (billboard != null)
-				billboard.drawBillboard(canvas);
+				billboard.drawBillboard(canvas, intersectionNumb, intersectionName);
 		}
 		
 		else
@@ -232,7 +254,11 @@ public class BackGroundMoveable extends View{
 	public void addNewBillboard()
 	{
 		if (billboardAmount == 1)
+		{
 			billboard = new Billboard(this, BitmapFactory.decodeResource(getResources(), R.drawable.billboard), speed);
+			/*billboard.setIntersectionNumb(currentNode.getSeed().toString());
+			billboard.setIntersectionName(currentNode.getName());*/
+		}
 	}
 	
 	public void clearBillboard()
