@@ -5,12 +5,6 @@ import java.util.Random;
 import com.EndlessGame.GUI.R;
 
 import BusinessLogic.*;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.Paint.Style;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +15,7 @@ public class PathAnimator extends Thread{
 	private MainScreen mainScreen;
 	private BackGroundMoveable background;
 	private PathGraph pathGraph;
-	private boolean teletransCollision, enemiesCollision;
+	private boolean teletransCollision, enemiesCollision, roadWeaponCollision;
 	private Node currentNode;
 	//private TextView pointsTxtView;
 	//private TextView livesNumbTxtView;
@@ -40,7 +34,7 @@ public class PathAnimator extends Thread{
 		
 		background = new BackGroundMoveable(mainScreen);
 		showBackground();
-		teletransCollision = enemiesCollision = false;
+		teletransCollision = enemiesCollision = roadWeaponCollision = false;
 		stop = false;
 		
 		player = new PlayerInfo("");
@@ -60,6 +54,8 @@ public class PathAnimator extends Thread{
 				
 				if (seconds == 25)
 					activateEnemies();
+				else if (seconds == 40)
+					activateWeapon();
 			}
 			
 			else	
@@ -70,6 +66,8 @@ public class PathAnimator extends Thread{
 				checkTeletransporterCollision();
 			if (enemiesCollision)
 				checkEnemiesCollision();
+			if (roadWeaponCollision)
+				checkRoadWeaponCollision();
 	
 			try 
 			{
@@ -111,6 +109,14 @@ public class PathAnimator extends Thread{
 		
 		//activate enemies collision check
 		enemiesCollision = true;
+	}
+	
+	public void activateWeapon()
+	{
+		background.setRoadWeaponAmount(1);
+		
+		//activate enemies collision check
+		roadWeaponCollision = true;
 	}
 	
 	public void activateTeletransporters()
@@ -204,6 +210,28 @@ public class PathAnimator extends Thread{
 				break;
 			}
 		}	
+	}
+	
+	public void checkRoadWeaponCollision()
+	{
+		boolean collition = false;
+		Vehicle vehicle = background.getVehicle();
+		Weapon weapon = background.getRoadWeapon();
+		
+		if (weapon != null)
+		{
+			collition = vehicle.getCoordX() <= weapon.getCoordX() + weapon.getWidth()&&
+						vehicle.getCoordX()+vehicle.getWidth() >= weapon.getCoordX() && 
+					    vehicle.getCoordY()+vehicle.getHeight() >= weapon.getCoordY() && 
+						vehicle.getCoordY() <= weapon.getCoordY() + weapon.getHeight();
+			if(collition)
+			{				
+				player.setLives(player.getLives()+1);
+				// Deactivate collision
+				roadWeaponCollision = false;
+				checkLives();
+			}
+		}
 	}
 	
 	protected void teletransport(){

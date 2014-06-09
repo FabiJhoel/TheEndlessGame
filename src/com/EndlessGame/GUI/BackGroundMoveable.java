@@ -33,8 +33,6 @@ public class BackGroundMoveable extends View{
 	private Random rand = new Random();
 	private Weapon roadWeapon;
 	
-	private Weapon test;
-	
 	public BackGroundMoveable(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -108,6 +106,7 @@ public class BackGroundMoveable extends View{
 			drawTeletransporters(canvas);
 			drawVehicle(canvas);
 			drawEnemy(canvas);
+			drawRoadWeapon(canvas);
 		}
 		
 		if(!stop)
@@ -163,7 +162,8 @@ public class BackGroundMoveable extends View{
 		
 		if (roadWeaponAmount == -1)
 		{	
-			roadWeapon.drawWeapon(canvas);
+			if(roadWeapon != null)
+				roadWeapon.drawWeapon(canvas);
 		}
 		
 		else
@@ -397,6 +397,24 @@ public class BackGroundMoveable extends View{
 
 	public void setEnemies(ArrayList<Enemy> enemies) {
 		this.enemies = enemies;
+	}
+
+	public int getRoadWeaponAmount() {
+		return roadWeaponAmount;
+	}
+
+	public void setRoadWeaponAmount(int roadWeaponAmount) {
+		this.roadWeaponAmount = roadWeaponAmount;
+	}
+
+	public Weapon getRoadWeapon() {
+		return roadWeapon;
+	}
+
+	public void setRoadWeapon(Weapon roadWeapon) {
+		this.roadWeapon = roadWeapon;
 	}	
+	
+	
 	
 }
