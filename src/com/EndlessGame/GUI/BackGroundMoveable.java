@@ -1,8 +1,12 @@
 package com.EndlessGame.GUI;
 
 import java.util.ArrayList;
+import java.util.Random;
+
 import com.EndlessGame.GUI.R;
+
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -26,7 +30,7 @@ public class BackGroundMoveable extends View{
 	private int billboardAmount;
 	private String intersectionNumb;
 	private String intersectionName;
-	
+	private Random rand = new Random();
 	
 	public BackGroundMoveable(Context context) {
 		super(context);
@@ -255,9 +259,13 @@ public class BackGroundMoveable extends View{
 	{
 		if (billboardAmount == 1)
 		{
-			billboard = new Billboard(this, BitmapFactory.decodeResource(getResources(), R.drawable.billboard), speed);
-			/*billboard.setIntersectionNumb(currentNode.getSeed().toString());
-			billboard.setIntersectionName(currentNode.getName());*/
+			TypedArray adImages_array = getResources().obtainTypedArray(R.array.ad_images);
+			int rndInt = rand.nextInt(adImages_array.length());
+			Bitmap adImage = BitmapFactory.decodeResource(getResources(), adImages_array.getResourceId(rndInt, 0));
+			adImages_array.recycle();
+			
+			billboard = new Billboard(this, BitmapFactory.decodeResource(getResources(), R.drawable.billboard), speed, adImage);
+		
 		}
 	}
 	

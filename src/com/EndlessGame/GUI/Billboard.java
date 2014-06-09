@@ -4,12 +4,16 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 public class Billboard extends PathObject{
 	
-	public Billboard(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed)
+	private Bitmap adImage;
+	
+	public Billboard(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed, Bitmap adImage)
 	{		
 		super(pBackground, pImage, pSpeed);
+		this.adImage = adImage;
         
 		coordX = (int)((750-(750*offset))*density);
 		coordY = -height;
@@ -18,12 +22,21 @@ public class Billboard extends PathObject{
 	public void drawBillboard(Canvas canvas, String intersectionNumb, String intersectionName)
 	{
 		drawPathObject(canvas);
-		writeText(canvas, intersectionNumb, intersectionName);
+		drawContent(canvas, intersectionNumb, intersectionName);
         coordY += speed ;
 	}
 	
-	public void writeText(Canvas canvas, String intersectionNumb, String intersectionName)
+	public void drawContent(Canvas canvas, String intersectionNumb, String intersectionName)
 	{
+		 int adWidth = adImage.getWidth();
+		 int adHeight = adImage.getHeight();
+		
+		// Draw ad image 
+		Rect src = new Rect(0, 0, adWidth, adHeight);
+        Rect dst = new Rect(coordX, coordY, coordX+adWidth, coordY+adHeight);
+        canvas.drawBitmap(adImage, src, dst, null);
+		
+        // Node info
 		Paint titlePaint = new Paint();
 		titlePaint.setColor(Color.YELLOW);
 		titlePaint.setTextSize(30);

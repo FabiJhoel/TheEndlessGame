@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <array name="ad_images">
+	    <item>@drawable/ad1</item>
+	    <item>@drawable/ad2</item>
+	    <item>@drawable/ad3</item>
+	    <item>@drawable/ad4</item>
+	    <item>@drawable/ad5</item>
+	    <item>@drawable/ad6</item>
+	    <item>@drawable/ad7</item>
+	    <item>@drawable/ad8</item>
+	    <item>@drawable/ad9</item>
+	</array>
+    
+</resources>
