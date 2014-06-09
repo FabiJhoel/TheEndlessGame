@@ -151,7 +151,7 @@ public class Node {
 		{					
 			childrenSeed = seedOp.getNewSeed();
 			childrenId = 3*id + contChildren;
-			Node children = new Node(childrenSeed, assignLevel(level), "", childrenId);
+			Node children = new Node(childrenSeed, assignLevel(level), "NOMBRE", childrenId);
 
 			if (numbOfChildren != 0) // Real children
 			{

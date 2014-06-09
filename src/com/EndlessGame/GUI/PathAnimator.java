@@ -86,7 +86,7 @@ public class PathAnimator extends Thread{
 	}
 	
 	public void increaseSpeed(){
-		if(speed < 8)
+		if(speed < 5)
 		{
 			speed++;
 			background.setSpeed(speed);

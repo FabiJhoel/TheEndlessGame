@@ -34,7 +34,7 @@ public class Billboard extends PathObject{
 		// Draw ad image 
 		Rect src = new Rect(0, 0, adWidth, adHeight);
         Rect dst = new Rect(coordX, coordY, coordX+adWidth, coordY+adHeight);
-        //canvas.drawBitmap(adImage, src, dst, null);
+        canvas.drawBitmap(adImage, src, dst, null);
 		
         // Node info
 		Paint titlePaint = new Paint();
@@ -43,7 +43,7 @@ public class Billboard extends PathObject{
 		titlePaint.setFakeBoldText(true);
 		
 		Paint valuesPaint = new Paint();
-		valuesPaint.setColor(Color.GREEN);
+		valuesPaint.setColor(Color.YELLOW);
 		valuesPaint.setTextSize(calculateOffset(15));
 		
 		canvas.drawText("Intersection Number:", coordX + calculateOffset(20), coordY + calculateOffset(50), titlePaint);
