@@ -14,6 +14,15 @@ public class PlayerInfo {
 		score = 0;
 	}
 
+	public boolean checkLives()
+	{
+		if (lives <= 0)
+			return true;
+		else
+			return false;
+	}
+	
+	//getters and setters
 	public String getName() {
 		return Name;
 	}
@@ -37,9 +46,5 @@ public class PlayerInfo {
 	public void setLives(int lives) {
 		this.lives = lives;
 	}
-
-	
-	
-	
 
 }

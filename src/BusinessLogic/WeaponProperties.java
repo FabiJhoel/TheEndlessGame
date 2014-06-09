@@ -1,6 +1,6 @@
 package BusinessLogic;
 
-public class Weapon {
+public class WeaponProperties {
 	private int thickness;
     private int polygonPoints;
     private int laneAmount;
@@ -9,7 +9,7 @@ public class Weapon {
     private byte polygonPointsByteRepresentacion;
     private int[] color; //RGB
 
-    public Weapon(byte pThicknessByteRepresentacion, byte pPolygonPointsByteRepresentacion, 
+    public WeaponProperties(byte pThicknessByteRepresentacion, byte pPolygonPointsByteRepresentacion, 
             byte pLaneAmountByteRepresentation, int[] pColor) {
         this.thicknessByteRepresentacion = pThicknessByteRepresentacion;
         this.polygonPointsByteRepresentacion = pPolygonPointsByteRepresentacion;

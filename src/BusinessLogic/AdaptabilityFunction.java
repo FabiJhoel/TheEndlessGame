@@ -12,7 +12,7 @@ public class AdaptabilityFunction {
      * only weapons with scope higher than the average of 
      * the population will fit. 
     */
-    public ArrayList<Integer> getPossibleParents(ArrayList<Weapon> pWeaponsPopulation){
+    public ArrayList<Integer> getPossibleParents(ArrayList<WeaponProperties> pWeaponsPopulation){
         double laneAverage = getPopulationAverage(pWeaponsPopulation);
         ArrayList<Integer> possibleParents = new ArrayList<>();
         for (int index = 0; index < pWeaponsPopulation.size(); index++){
@@ -23,9 +23,9 @@ public class AdaptabilityFunction {
         return possibleParents;
     }
     
-    public double getPopulationAverage (ArrayList<Weapon> pWeaponsPopulation){
+    public double getPopulationAverage (ArrayList<WeaponProperties> pWeaponsPopulation){
         double average = 0;
-        for (Weapon weapon: pWeaponsPopulation){
+        for (WeaponProperties weapon: pWeaponsPopulation){
             average += weapon.getLaneAmount();
         }
         average /= pWeaponsPopulation.size();

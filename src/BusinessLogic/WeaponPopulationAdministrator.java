@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class WeaponPopulationAdministrator {
-	private ArrayList<Weapon> weaponsPopulation = new ArrayList<>();
+	private ArrayList<WeaponProperties> weaponsPopulation = new ArrayList<>();
     private GeneticAlgorithmManager geneticAlgorithmManager;
 
     public WeaponPopulationAdministrator() {
         geneticAlgorithmManager = new GeneticAlgorithmManager();
     }
     
-    public void addWeapon(Weapon pWeapon){
+    public void addWeapon(WeaponProperties pWeapon){
         weaponsPopulation.add(pWeapon);
     }
 
-    public Weapon generateDefaultWeapon(){
+    public WeaponProperties generateDefaultWeapon(){
         Random rand = new Random();
         //random function:  ((max-min)+1)+min
         byte thicknessByteRepresentacion = (byte)(rand.nextInt((255-0)+1)+0);
@@ -41,13 +41,13 @@ public class WeaponPopulationAdministrator {
                 break;
         }
         
-        return new Weapon(thicknessByteRepresentacion, polygonPointsByteRepresentacion, 
+        return new WeaponProperties(thicknessByteRepresentacion, polygonPointsByteRepresentacion, 
                 laneAmountByteRepresentation, color);
         
     }
     
-    public Weapon generateWeapon(Weapon pWeapon){
-        Weapon newWeapon = geneticAlgorithmManager.createNewGeneration(pWeapon, weaponsPopulation);
+    public WeaponProperties generateWeapon(WeaponProperties pWeapon){
+        WeaponProperties newWeapon = geneticAlgorithmManager.createNewGeneration(pWeapon, weaponsPopulation);
         return newWeapon;
     }
 }

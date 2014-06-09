@@ -20,9 +20,9 @@ public class BackGroundMoveable extends View{
 	private final float leftRoadLimit = (float)(80-(80*offset))*density;
 	private Bitmap mainPath, warpPath, roadPath;
 	private int farY, nearY, speed; 
-	private boolean warp;
+	private boolean warp, stop;
 	private ArrayList<Teletransporter> teletransporters;
-	private int teletransportersAmount;
+	private int teletransportersAmount, roadWeaponAmount;
 	private Vehicle vehicle;
 	private ArrayList<Enemy> enemies;
 	private int enemiesAmount;
@@ -31,6 +31,9 @@ public class BackGroundMoveable extends View{
 	private String intersectionNumb;
 	private String intersectionName;
 	private Random rand = new Random();
+	private Weapon roadWeapon;
+	
+	private Weapon test;
 	
 	public BackGroundMoveable(Context context) {
 		super(context);
@@ -46,9 +49,11 @@ public class BackGroundMoveable extends View{
 		enemies = new ArrayList<>();
 		enemiesAmount = -1;
 		billboard = null;
-		billboardAmount = -1;
+		billboardAmount = roadWeaponAmount = -1;
 		intersectionNumb = "";
 		intersectionName = "";
+		stop = false;
+		roadWeapon = null;		
 	}
 	
 	public String getIntersectionNumb() 
@@ -105,7 +110,8 @@ public class BackGroundMoveable extends View{
 			drawEnemy(canvas);
 		}
 		
-		invalidate();
+		if(!stop)
+			invalidate();
 	}
 	
 	@Override
@@ -153,6 +159,20 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
+	protected void drawRoadWeapon(Canvas canvas){
+		
+		if (roadWeaponAmount == -1)
+		{	
+			roadWeapon.drawWeapon(canvas);
+		}
+		
+		else
+		{
+			roadWeapon = new Weapon(this,speed,null);
+			roadWeaponAmount = -1;	
+		}
+	}
+	
 	protected void drawBillboard(Canvas canvas)
 	{			
 		if (billboardAmount == -1)
@@ -163,7 +183,7 @@ public class BackGroundMoveable extends View{
 		
 		else
 		{
-			clearBillboard();
+			billboard = null;
 			addNewBillboard();
 			billboardAmount = -1;	
 		}
@@ -269,11 +289,6 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	public void clearBillboard()
-	{
-		billboard = null;
-	}
-	
 	//Getter and Setter
 	public Bitmap getMainPath() {
 		return mainPath;
@@ -360,12 +375,28 @@ public class BackGroundMoveable extends View{
 		billboard = pBillboard;
 	}
 
-	
 	public int getBillboardAmount() {
 		return billboardAmount;
 	}
 
 	public void setBillboardAmount(int billboardAmount) {
 		this.billboardAmount = billboardAmount;
+	}
+
+	public boolean isStop() {
+		return stop;
+	}
+
+	public void setStop(boolean stop) {
+		this.stop = stop;
+	}
+
+	public ArrayList<Enemy> getEnemies() {
+		return enemies;
+	}
+
+	public void setEnemies(ArrayList<Enemy> enemies) {
+		this.enemies = enemies;
 	}	
+	
 }

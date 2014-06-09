@@ -2,7 +2,7 @@ package BusinessLogic;
 
 public class Vehicle extends PathObject{
 	WeaponPopulationAdministrator weaponAdministrator;
-    Weapon currentWeapon;
+    WeaponProperties currentWeapon;
 
     public Vehicle(double axisX, double axis) {
         super(axisX, axis);
@@ -19,11 +19,11 @@ public class Vehicle extends PathObject{
         this.weaponAdministrator = weaponAdministrator;
     }
 
-    public Weapon getCurrentWeapon() {
+    public WeaponProperties getCurrentWeapon() {
         return currentWeapon;
     }
 
-    public void setCurrentWeapon(Weapon currentWeapon) {
+    public void setCurrentWeapon(WeaponProperties currentWeapon) {
         this.currentWeapon = currentWeapon;
     }
     

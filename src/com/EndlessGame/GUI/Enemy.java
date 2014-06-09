@@ -19,7 +19,7 @@ public class Enemy extends PathObject{
         //System.out.println("Density: "+density);
         laneWidth = (float)(115-(115*offset))*density;
         leftRoadLimit = (int)((105-(105*offset))*density);
-        System.out.println("LRL: "+leftRoadLimit);
+        //System.out.println("LRL: "+leftRoadLimit);
         
 		coordX = chooseLane();
 		coordY = topRoadLimit;

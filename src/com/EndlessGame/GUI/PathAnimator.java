@@ -5,6 +5,12 @@ import java.util.Random;
 import com.EndlessGame.GUI.R;
 
 import BusinessLogic.*;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.Paint.Style;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,11 +21,12 @@ public class PathAnimator extends Thread{
 	private MainScreen mainScreen;
 	private BackGroundMoveable background;
 	private PathGraph pathGraph;
-	private boolean teletransCollision;
+	private boolean teletransCollision, enemiesCollision;
 	private Node currentNode;
 	//private TextView pointsTxtView;
 	//private TextView livesNumbTxtView;
 	private PlayerInfo player;
+	private boolean stop;
 	
 	
 	public PathAnimator(MainScreen pMainScreen)
@@ -33,7 +40,8 @@ public class PathAnimator extends Thread{
 		
 		background = new BackGroundMoveable(mainScreen);
 		showBackground();
-		teletransCollision = false;
+		teletransCollision = enemiesCollision = false;
+		stop = false;
 		
 		player = new PlayerInfo("");
 	}
@@ -44,8 +52,6 @@ public class PathAnimator extends Thread{
 
 	public void run()
 	{
-		boolean stop = false;
-		
 		while(!stop)
 		{
 			if (seconds < 50)
@@ -62,6 +68,8 @@ public class PathAnimator extends Thread{
 			// Verify collision
 			if (teletransCollision)
 				checkTeletransporterCollision();
+			if (enemiesCollision)
+				checkEnemiesCollision();
 	
 			try 
 			{
@@ -100,6 +108,9 @@ public class PathAnimator extends Thread{
         Random randomGenerator = new Random();
         int enemiesNumb = randomGenerator.nextInt(3) +1;
 		background.setEnemiesAmount(enemiesNumb);
+		
+		//activate enemies collision check
+		enemiesCollision = true;
 	}
 	
 	public void activateTeletransporters()
@@ -171,6 +182,30 @@ public class PathAnimator extends Thread{
 		}		
 	}
 
+	protected void checkEnemiesCollision()
+	{
+		boolean collition = false;
+		Vehicle vehicle = background.getVehicle();
+		Enemy enemy;
+		
+		for (int index = 0; index < background.getEnemies().size(); index++){
+			enemy = background.getEnemies().get(index);
+			collition = vehicle.getCoordX() <= enemy.getCoordX() + enemy.getWidth()&&
+						vehicle.getCoordX()+vehicle.getWidth() >= enemy.getCoordX() && 
+					    vehicle.getCoordY()+vehicle.getHeight() >= enemy.getCoordY() && 
+						vehicle.getCoordY() <= enemy.getCoordY() + enemy.getHeight();
+			if(collition)
+			{				
+				player.setLives(player.getLives()-1);
+				System.out.println("VIDAS RESTANTES: "+player.getLives());
+				// Deactivate collision
+				enemiesCollision = false;
+				checkLives();
+				break;
+			}
+		}	
+	}
+	
 	protected void teletransport(){
 		int warpSpeed = 40;
 		background.setWarp(true);
@@ -211,5 +246,15 @@ public class PathAnimator extends Thread{
 		TextView livesNumbTxtView = (TextView)mainScreen.findViewById(R.id.livesNumbTextView);
 		livesNumbTxtView.bringToFront();	
 	}
+	
+	protected void checkLives()
+	{
+		if (player.checkLives())
+		{
+			stop = true;
+			background.setStop(true);
+		}
+	}
+
 
 }

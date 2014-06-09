@@ -10,8 +10,8 @@ public class GeneticAlgorithmManager {
         adaptabilityFunction = new AdaptabilityFunction();
     }
     
-    public Weapon createNewGeneration(Weapon pParentA, ArrayList<Weapon> pWeaponsPopulation){ //here the algorithm crosses parents
-        Weapon parentB = selectParent(pWeaponsPopulation);
+    public WeaponProperties createNewGeneration(WeaponProperties pParentA, ArrayList<WeaponProperties> pWeaponsPopulation){ //here the algorithm crosses parents
+        WeaponProperties parentB = selectParent(pWeaponsPopulation);
 
         System.out.println("\n\nPARENTA: "+ pParentA.toString()+"\n");
         System.out.println("\nPARENTB: "+ parentB.toString()+"\n");
@@ -39,10 +39,10 @@ public class GeneticAlgorithmManager {
         /*Control population size*/
         controlPopulationSize(pWeaponsPopulation);
         
-        return new Weapon(newThickness, newPolygonPoints, newLaneAmount, newColor);  
+        return new WeaponProperties(newThickness, newPolygonPoints, newLaneAmount, newColor);  
     }
     
-    public Weapon selectParent(ArrayList<Weapon> pWeaponsPopulation){
+    public WeaponProperties selectParent(ArrayList<WeaponProperties> pWeaponsPopulation){
         Random rand = new Random();
         ArrayList<Integer> possibleParents = adaptabilityFunction.getPossibleParents(pWeaponsPopulation);
         int selectedParent = (rand.nextInt(((possibleParents.size()-1)-0)+1)+0);
@@ -84,7 +84,7 @@ public class GeneticAlgorithmManager {
         return (byte)masquerade;
     }
     
-    public void controlPopulationSize(ArrayList<Weapon> pWeaponsPopulation){
+    public void controlPopulationSize(ArrayList<WeaponProperties> pWeaponsPopulation){
         //remove population excess using random death
         if(pWeaponsPopulation.size() >= 20){
             pWeaponsPopulation.remove((int)(Math.random()*(19-0)));

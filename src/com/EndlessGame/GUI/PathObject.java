@@ -21,15 +21,23 @@ public abstract class PathObject {
 		background = pBackground;
 		speed = pSpeed;
 		image = pImage;
-		width = pImage.getWidth();
-		height = pImage.getHeight();
-        density = background.getResources().getDisplayMetrics().density;
+		if (image != null)
+		{
+			width = pImage.getWidth();
+			height = pImage.getHeight();
+		}
+		density = background.getResources().getDisplayMetrics().density;
 	}
 
 	protected void drawPathObject(Canvas canvas){
 		Rect src = new Rect(0, 0, width, height);
         Rect dst = new Rect(coordX, coordY, coordX+width, coordY+height);
         canvas.drawBitmap(image, src, dst, null);
+	}
+	
+	protected float calculateOffset(int pDpi)
+	{
+		return (float)((pDpi-(pDpi*offset))*density);
 	}
 	
 	//getters and setters
