@@ -1,11 +1,10 @@
 package BusinessLogic;
 
-public class Vehicle extends PathObject{
+public class VehicleProperties {
 	WeaponPopulationAdministrator weaponAdministrator;
     WeaponProperties currentWeapon;
 
-    public Vehicle(double axisX, double axis) {
-        super(axisX, axis);
+    public VehicleProperties() {
         weaponAdministrator = new WeaponPopulationAdministrator();
         currentWeapon = weaponAdministrator.generateDefaultWeapon();
         weaponAdministrator.addWeapon(currentWeapon);
@@ -27,9 +26,9 @@ public class Vehicle extends PathObject{
         this.currentWeapon = currentWeapon;
     }
     
-    public void generateWeapon(){
+    public void generateWeapon(WeaponProperties foundWeapon){
         //supposing weaponAdministrator.generateDefaultWeapon() is the weapon found in the road
-        currentWeapon = weaponAdministrator.generateWeapon(weaponAdministrator.generateDefaultWeapon());
+        currentWeapon = weaponAdministrator.generateWeapon(foundWeapon);
         weaponAdministrator.addWeapon(currentWeapon);
     }
 }

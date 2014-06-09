@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Paint.Style;
 
 public class Weapon extends PathObject{
@@ -19,20 +18,29 @@ public class Weapon extends PathObject{
 	private int radious;
 	private WeaponProperties weapon;
 	private static WeaponPopulationAdministrator wPAdmin = new WeaponPopulationAdministrator();
+	private boolean isCurrent;
 	
-	public Weapon(BackGroundMoveable pBackground, int pSpeed, WeaponProperties pWeapon)
+	public Weapon(BackGroundMoveable pBackground, int pSpeed, WeaponProperties pWeapon, boolean pIsCurrent)
 	{
 		super(pBackground, null, pSpeed);
         
         laneWidth = (float)(115-(115*offset))*density;
         leftRoadLimit = (int)((105-(105*offset))*density);
-        radious = 50;
+        isCurrent = pIsCurrent;
         
-		coordX = radious + chooseLane();
-		coordY = radious + (-3*radious); 
-		
+        if (!isCurrent)
+        {
+	        radious = 50;
+			coordX = radious + chooseLane();
+			coordY = radious + (-3*radious); 
+        }
+        else
+        	radious = 30;
+        
 		if (pWeapon == null)
 			weapon = wPAdmin.generateDefaultWeapon();
+		else
+			weapon = pWeapon;
 	}
 
 	private int chooseLane()
@@ -104,6 +112,26 @@ public class Weapon extends PathObject{
 
 	public static void setLeftRoadLimit(int leftRoadLimit) {
 		Weapon.leftRoadLimit = leftRoadLimit;
+	}
+	
+	public WeaponProperties getWeapon() {
+		return weapon;
+	}
+
+	public void setWeapon(WeaponProperties weapon) {
+		this.weapon = weapon;
+	}
+
+	@Override
+	public void setCoordX(int pCoordX)
+	{
+		coordX = pCoordX+radious;
+	}
+	
+	@Override
+	public void setCoordY(int pCoordY)
+	{
+		coordY = pCoordY+radious;
 	}
 	
 }

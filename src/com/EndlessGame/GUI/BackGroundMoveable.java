@@ -128,11 +128,17 @@ public class BackGroundMoveable extends View{
 			case MotionEvent.ACTION_DOWN: //this motion event prevents undesirable touches
 				if(coordX > vehicle.getCoordX()){
 					if((vehicle.getCoordX()+laneWidth)<=rigthPathLimit)
+					{
 						vehicle.setCoordX((int)(vehicle.getCoordX()+laneWidth));
+						vehicle.getCurrentWeapon().setCoordX(vehicle.getCoordX()+vehicle.getWidth());
+					}
 				}
 				else if(coordX < vehicle.getCoordX()){
 					if ((vehicle.getCoordX()-laneWidth) >= leftPathLimit)
+					{
 						vehicle.setCoordX((int)(vehicle.getCoordX()-laneWidth));
+						vehicle.getCurrentWeapon().setCoordX(vehicle.getCoordX()+vehicle.getWidth());
+					}
 				}
 				break;
 		}
@@ -168,7 +174,7 @@ public class BackGroundMoveable extends View{
 		
 		else
 		{
-			roadWeapon = new Weapon(this,speed,null);
+			roadWeapon = new Weapon(this,speed,null,false);
 			roadWeaponAmount = -1;	
 		}
 	}

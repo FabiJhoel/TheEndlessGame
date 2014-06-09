@@ -226,10 +226,12 @@ public class PathAnimator extends Thread{
 						vehicle.getCoordY() <= weapon.getCoordY() + weapon.getHeight();
 			if(collition)
 			{				
-				player.setLives(player.getLives()+1);
+				//player.setLives(player.getLives()+1);
+				vehicle.getVehicle().generateWeapon(weapon.getWeapon());
+				vehicle.setNewWeapon();
 				// Deactivate collision
 				roadWeaponCollision = false;
-				checkLives();
+				//checkLives();
 			}
 		}
 	}
