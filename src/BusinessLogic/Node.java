@@ -1,6 +1,7 @@
 package BusinessLogic;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.math.BigInteger;
 
 public class Node {
@@ -15,8 +16,8 @@ public class Node {
 	private ArrayList<Node> nextArcs = new ArrayList<Node>();
 	private SeedOperator seedOp = SeedOperator.getInstance();
 	
-	public Node(BigInteger pSeed, int pLevel, String pName, long pId){
-		
+	public Node(BigInteger pSeed, int pLevel, String pName, long pId)
+	{		
 		id = pId;
 		seed = pSeed;
 		level = pLevel;
@@ -35,59 +36,73 @@ public class Node {
 		this.id = id;
 	}
 
-	public BigInteger getSeed() {
+	public BigInteger getSeed() 
+	{
 		return seed;
 	}
 
-	public void setSeed(BigInteger seed) {
+	public void setSeed(BigInteger seed) 
+	{
 		this.seed = seed;
 	}
 
-	public int getLevel() {
+	public int getLevel() 
+	{
 		return level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(int level) 
+	{
 		this.level = level;
 	}
 
-	public boolean getVisited() {
+	public boolean getVisited()
+	{
 		return visited;
 	}
 
-	public void setVisited(boolean visited) {
+	public void setVisited(boolean visited) 
+	{
 		this.visited = visited;
 	}
 
-	public String getName() {
+	public String getName() 
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) 
+	{
 		this.name = name;
 	}
 
-	public boolean getIsReturn() {
+	public boolean getIsReturn() 
+	{
 		return isReturn;
 	}
 
-	public void setIsReturn(boolean isReturn) {
+	public void setIsReturn(boolean isReturn) 
+	{
 		this.isReturn = isReturn;
 	}
 	
-	public boolean isReal() {
+	public boolean isReal() 
+	{
 		return isReal;
 	}
 
-	public void setIsReal(boolean isReal) {
+	public void setIsReal(boolean isReal) 
+	{
 		this.isReal = isReal;
 	}
 
-	public ArrayList<Node> getNextArcs() {
+	public ArrayList<Node> getNextArcs() 
+	{
 		return nextArcs;
 	}
 	
-	public ArrayList<Node> getRealArcs() {
+	public ArrayList<Node> getRealArcs()
+	{
 		ArrayList<Node> realArcs = new ArrayList<Node>();
 		for(Node arc : nextArcs){
 			if (arc.isReal)
@@ -101,7 +116,7 @@ public class Node {
 		nextArcs.add(nextArc);
 	}	
 	
-	 public int assignLevel(int parentLevel)
+	public int assignLevel(int parentLevel)
     {
     	int level = parentLevel + 1;
     	
@@ -129,7 +144,7 @@ public class Node {
 			 currentNodeLevel --;
 			 
 			 // Create parent
-			 Node parent = new Node(seedOp.getSpecificSeed(currentNodeId), currentNodeLevel, "", currentNodeId);
+			 Node parent = new Node(seedOp.getSpecificSeed(currentNodeId), currentNodeLevel, generateRandWord(), currentNodeId);
 			 parent.setVisited(true);
 			 parents.add(parent);	
 		 }
@@ -143,15 +158,12 @@ public class Node {
 		BigInteger childrenSeed = null; 
 		long childrenId = 0;
 		
-		/*if(this.isReal)
-			System.out.println("PADRE #" + seed + " Nivel: " + level);*/
-		
 		// Create always 3 children (not necessarily all real)
 		for (int contChildren = -1; contChildren < 2; contChildren++)
 		{					
 			childrenSeed = seedOp.getNewSeed();
 			childrenId = 3*id + contChildren;
-			Node children = new Node(childrenSeed, assignLevel(level), "NOMBRE", childrenId);
+			Node children = new Node(childrenSeed, assignLevel(level), generateRandWord(), childrenId);
 
 			if (numbOfChildren != 0) // Real children
 			{
@@ -161,15 +173,20 @@ public class Node {
 	
 			addNextArc(children);
 		}
-		
-		//System.out.println("PADRE #" + seed + " HIJOS REALES: " + getRealArcs().size());
-		
-		/*for (Node c : getNextArcs())
-		{
-			if (c.isReal)
-				System.out.println("HIJO #" + c.getSeed() + " Nivel: " + c.getLevel());
-		}*/
 	}
 	
-
+	public static String generateRandWord()
+	{
+	    Random random = new Random();
+        char[] wordArray = new char[random.nextInt(8)+3]; 
+        
+        for(int index = 0; index < wordArray.length; index++)
+        {
+            wordArray[index] = (char)('a' + random.nextInt(26));
+        }
+        
+        String word = new String(wordArray);
+        
+	    return word;    
+	}	
 }

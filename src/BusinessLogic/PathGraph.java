@@ -50,7 +50,7 @@ public class PathGraph {
     public Node setInitialIntersection()
     {
     	BigInteger initialSeed = BigInteger.valueOf(6);
-    	Node initialNode = new Node(initialSeed, 1, "", 1);
+    	Node initialNode = new Node(initialSeed, 1, Node.generateRandWord(), 1);
     	initialNode.setIsReal(true);
     	return initialNode;
     }
