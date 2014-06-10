@@ -52,13 +52,20 @@ public class Weapon extends PathObject{
 		return laneSelected;
 	}
 	
-	protected void drawWeapon(Canvas canvas)
+	public void drawWeapon(Canvas canvas)
 	{
-		canvas.drawPath(createPath(), setPathCharacteristics());
-		coordY += (speed + speed/4);
+		try
+		{
+			canvas.drawPath(createPath(), setPathCharacteristics());
+			coordY += (speed + speed/4);
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Weapon.drawWeapon() failure");
+    	}
 	}
 	
-	protected Paint setPathCharacteristics()
+	private Paint setPathCharacteristics()
 	{
 		Paint paint = new Paint();
 		paint.setStrokeWidth(weapon.getThickness());	
@@ -69,7 +76,7 @@ public class Weapon extends PathObject{
 		return paint;
 	}
 	
-	protected Path createPath()
+	private Path createPath()
 	{
 		Path path = new Path();
 		int sides = weapon.getPolygonPoints();

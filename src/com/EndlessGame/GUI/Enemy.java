@@ -31,18 +31,32 @@ public class Enemy extends PathObject{
 	
 	public void drawEnemy(Canvas canvas)
 	{
-		drawPathObject(canvas);
-        coordY += (speed + speed/8) ;
-        if(bullet != null)
-        	bullet.drawBullet(canvas);
+		try
+		{
+			drawPathObject(canvas);
+	        coordY += (speed + speed/8) ;
+	        if(bullet != null)
+	        	bullet.drawBullet(canvas);
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Enemy.drawEnemy() failure");
+    	}
 	}
 	
-	protected void addBullet()
+	public void addBullet()
 	{
-		bullet = new Bullet(background,null,speed,false,1);
-		//AGREGAR X Y Y DE LAS BALAS AQUI
-		bullet.setCoordY(coordY+height);
-		bullet.setCoordX(coordX+width/2);
+		try
+		{
+			bullet = new Bullet(background,null,speed,false,1);
+			//AGREGAR X Y Y DE LAS BALAS AQUI
+			bullet.setCoordY(coordY+height);
+			bullet.setCoordX(coordX+width/2);
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Enemy.addBullet() failure");
+    	}
 	}
 	
 	private int chooseLane()
@@ -53,6 +67,8 @@ public class Enemy extends PathObject{
 		
 		return laneSelected;
 	}
+	
+	//getters and setters
 	
 	public int getSpeed() {
 		return speed;

@@ -7,7 +7,8 @@ public class Teletransporter extends PathObject{
 	
 	private static int leftRoadLimit = -1;
 
-	public Teletransporter(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed, int pLeftRoadLimit) {
+	public Teletransporter(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed, int pLeftRoadLimit) 
+	{
 		super(pBackground, pImage, pSpeed);
 		
 		if (leftRoadLimit == -1)
@@ -18,9 +19,16 @@ public class Teletransporter extends PathObject{
 		leftRoadLimit = leftRoadLimit+width;
 	}
 
-	protected void drawTeletransporter(Canvas canvas) {
-		drawPathObject(canvas);
-        coordY += speed;
+	public void drawTeletransporter(Canvas canvas) {
+		try
+		{
+			drawPathObject(canvas);
+	        coordY += speed;
+		}
+        catch(Exception e)
+    	{
+    		System.out.println("ERROR: Teletransporter.drawTeletransporter() failure");
+    	}
 	}
 
 	public static float getLeftRoadLimit() {

@@ -22,12 +22,19 @@ public class Billboard extends PathObject{
 	
 	public void drawBillboard(Canvas canvas, String intersectionNumb, String intersectionName, boolean isVisited)
 	{
-		drawPathObject(canvas);
-		drawContent(canvas, intersectionNumb, intersectionName, isVisited);
-        coordY += speed ;
+		try
+		{
+			drawPathObject(canvas);
+			drawContent(canvas, intersectionNumb, intersectionName, isVisited);
+	        coordY += speed ;
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Billboard.drawBillboard() failure");
+    	}
 	}
 	
-	public void drawContent(Canvas canvas, String intersectionNumb, String intersectionName, boolean isVisited)
+	private void drawContent(Canvas canvas, String intersectionNumb, String intersectionName, boolean isVisited)
 	{
 		 int adWidth = adImage.getWidth();
 		 int adHeight = adImage.getHeight();

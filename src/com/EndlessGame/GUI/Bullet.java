@@ -8,6 +8,7 @@ public class Bullet extends PathObject{
 	
 	boolean type; //false = enemy true = vehicle
 	int scope;
+	
 	public Bullet (BackGroundMoveable pBackground, Bitmap pImage, int pSpeed, boolean pType, int pScope)
 	{
 		super(pBackground, pImage, pSpeed);
@@ -18,11 +19,18 @@ public class Bullet extends PathObject{
 	
 	public void drawBullet (Canvas canvas)
 	{
-		drawPathObject(canvas);
-		if (type)
-			coordY -= (speed + speed/4);
-		else
-			coordY += (speed + speed/2);
+		try
+		{
+			drawPathObject(canvas);
+			if (type)
+				coordY -= (speed + speed/4);
+			else
+				coordY += (speed + speed/2);
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Bullet.drawBullet() failure");
+    	}
 	}
 	
 	@Override
