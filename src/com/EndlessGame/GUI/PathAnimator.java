@@ -5,6 +5,7 @@ import java.util.Random;
 import com.EndlessGame.GUI.R;
 
 import BusinessLogic.*;
+import android.media.MediaPlayer;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class PathAnimator extends Thread{
 	//private TextView livesNumbTxtView;
 	private PlayerInfo player;
 	private boolean stop;
+	private MediaPlayer mainSound;
 	
 	
 	public PathAnimator(MainScreen pMainScreen)
@@ -31,6 +33,10 @@ public class PathAnimator extends Thread{
 		pathGraph = new PathGraph();
 		currentNode = pathGraph.setInitialIntersection();
 		pathGraph.generateLevel(currentNode);
+		
+		mainSound = MediaPlayer.create(mainScreen, R.raw.main_screen_theme);
+		mainSound.setLooping(true);
+		mainSound.setVolume((float)0.3, (float)0.3);
 		
 		background = new BackGroundMoveable(mainScreen);
 		showBackground();
@@ -152,6 +158,9 @@ public class PathAnimator extends Thread{
 		for (Enemy enemy : background.getEnemies())
 		{
 			enemy.addBullet();
+			MediaPlayer sound = MediaPlayer.create(mainScreen, R.raw.disparo_malo);
+			sound.setVolume((float)0.3, (float)0.3);
+			sound.start();
 			try 
 			{
 				Thread.sleep(500);
@@ -213,9 +222,10 @@ public class PathAnimator extends Thread{
 						vehicle.getCoordY() <= teletransporter.getCoordY() + teletransporter.getHeight();
 			if(collition)
 			{
+				MediaPlayer sound = MediaPlayer.create(mainScreen, R.raw.teletransport);
+				sound.start();
 				teletransport();
 				
-				System.out.println("ESCOGIDO: "+(index+1));
 				currentNode = currentNode.getRealArcs().get(index);				
 				
 				// Verify if is a return node
@@ -261,6 +271,8 @@ public class PathAnimator extends Thread{
 						vehicle.getCoordY() <= enemy.getCoordY() + enemy.getHeight();
 			if(collition)
 			{				
+				MediaPlayer sound = MediaPlayer.create(mainScreen, R.raw.choque);
+				sound.start();
 				player.setLives(player.getLives()-1);
 				// Deactivate collision
 				enemiesCollision = false;
@@ -286,6 +298,8 @@ public class PathAnimator extends Thread{
 									bullet.getCoordY() <= vehicle.getCoordY() + vehicle.getHeight();
 			if(collition)
 			{
+				MediaPlayer sound = MediaPlayer.create(mainScreen, R.raw.choque);
+				sound.start();
 				player.setLives(player.getLives()-1);
 				// Deactivate collision
 				enemiesCollision = false;
@@ -311,13 +325,13 @@ public class PathAnimator extends Thread{
 					    vehicle.getCoordY()+vehicle.getHeight() >= weapon.getCoordY() && 
 						vehicle.getCoordY() <= weapon.getCoordY() + weapon.getHeight();
 			if(collition)
-			{				
-				//player.setLives(player.getLives()+1);
+			{			
+				MediaPlayer sound = MediaPlayer.create(mainScreen, R.raw.arma_nueva);
+				sound.start();
 				vehicle.getVehicle().generateWeapon(weapon.getWeapon());
 				vehicle.setNewWeapon();
 				// Deactivate collision
 				roadWeaponCollision = false;
-				//checkLives();
 			}
 		}
 	}
@@ -332,7 +346,7 @@ public class PathAnimator extends Thread{
 		/*background.clearBillboard();
 		background.clearTeletransporters();*/
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(800);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -361,6 +375,8 @@ public class PathAnimator extends Thread{
 		
 		TextView livesNumbTxtView = (TextView)mainScreen.findViewById(R.id.livesNumbTextView);
 		livesNumbTxtView.bringToFront();	
+		
+		mainSound.start();
 	}
 	
 	protected void checkLives()

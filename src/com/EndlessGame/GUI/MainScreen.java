@@ -3,6 +3,7 @@ package com.EndlessGame.GUI;
 import com.EndlessGame.GUI.R;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -66,6 +67,9 @@ public class MainScreen extends Activity{
 
 	public void shootButtonOnClick(View view)
 	{
+		MediaPlayer sound = MediaPlayer.create(this, R.raw.disparo_bueno);
+		sound.seekTo(900);
+		sound.start();
 		pathAnimator.getBackground().getVehicle().addBullet();
 		pathAnimator.setBulletVehicleCollision(true);
 	}
