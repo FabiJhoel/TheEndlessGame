@@ -39,13 +39,21 @@ public class GeneticAlgorithmManager {
     }
     
     public WeaponProperties selectParent(ArrayList<WeaponProperties> pWeaponsPopulation){
-        Random rand = new Random();
-        ArrayList<Integer> possibleParents = adaptabilityFunction.getPossibleParents(pWeaponsPopulation);
-        int selectedParent = (rand.nextInt(((possibleParents.size()-1)-0)+1)+0);
-        return pWeaponsPopulation.get(possibleParents.get(selectedParent));
+    	try
+    	{
+	        Random rand = new Random();
+	        ArrayList<Integer> possibleParents = adaptabilityFunction.getPossibleParents(pWeaponsPopulation);
+	        int selectedParent = (rand.nextInt(((possibleParents.size()-1)-0)+1)+0);
+	        return pWeaponsPopulation.get(possibleParents.get(selectedParent));
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("ERROR: GeneticAlgorithmManager.selectParent() failure");
+    		return null;
+    	}
     }
     
-    public byte crossChromosomes (byte parentA, byte parentB){
+    private byte crossChromosomes (byte parentA, byte parentB){
         Random rand = new Random();
         byte offspring = 0;
         int section = (rand.nextInt((7-1)+1)+1);
@@ -68,7 +76,7 @@ public class GeneticAlgorithmManager {
         return offspring;
     }
     
-    public byte generateMasquerade(int pSize, boolean shift){
+    private byte generateMasquerade(int pSize, boolean shift){
         int masquerade = 0b00000000;
         for (int counter = 0; counter < pSize; counter++){
             masquerade = (masquerade | (int)Math.pow(2, counter));
@@ -78,7 +86,7 @@ public class GeneticAlgorithmManager {
         return (byte)masquerade;
     }
     
-    public void controlPopulationSize(ArrayList<WeaponProperties> pWeaponsPopulation){
+    private void controlPopulationSize(ArrayList<WeaponProperties> pWeaponsPopulation){
         //remove population excess using random death
         if(pWeaponsPopulation.size() >= 20){
             pWeaponsPopulation.remove((int)(Math.random()*(19-0)));

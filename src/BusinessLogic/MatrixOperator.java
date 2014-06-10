@@ -4,26 +4,26 @@ import java.util.ArrayList;
 
 public class MatrixOperator {
 	
-	public static boolean [][] calculateTransitiveMat(boolean [][] adjMat, int size)
+	private static boolean [][] calculateTransitiveMat(boolean [][] adjMat, int size)
     {
     	boolean [][] transitiveMat = new boolean[size][size];
     	
     	// Copy adjacency mat into transitive closure mat
-    	for (int i = 0; i < size; i++)
+    	for (int indexI = 0; indexI < size; indexI++)
         {
-            for (int j = 0; j < size; j++)
+            for (int indexJ = 0; indexJ < size; indexJ++)
             {
-            	transitiveMat[i][j] = adjMat[i][j];
+            	transitiveMat[indexI][indexJ] = adjMat[indexI][indexJ];
             }
         }
     	
-        for (int k = 0; k < size; k++)
+        for (int indexK = 0; indexK < size; indexK++)
         {
-            for (int i = 0; i < size; i++)
+            for (int indexM = 0; indexM < size; indexM++)
             {
-                for (int j = 0; j < size; j++)
+                for (int indexN = 0; indexN < size; indexN++)
                 {
-                	transitiveMat[i][j] = (transitiveMat[i][j] || (transitiveMat[i][k] && transitiveMat[k][j]));
+                	transitiveMat[indexM][indexN] = (transitiveMat[indexM][indexN] || (transitiveMat[indexM][indexK] && transitiveMat[indexK][indexN]));
                 }
             }
         }
@@ -31,7 +31,7 @@ public class MatrixOperator {
     	return transitiveMat;
     }
 	
-	public static boolean [][] calculateAdjacencyMat(ArrayList<Node> subGraph)
+	private static boolean [][] calculateAdjacencyMat(ArrayList<Node> subGraph)
     {
     	// Create adjacency matrix
 		int size = subGraph.size();
@@ -57,7 +57,7 @@ public class MatrixOperator {
 		return adjMat;
     }
 	
-	public static int calculateTransitiveClosure(Node localSol)
+	private static int calculateTransitiveClosure(Node localSol)
     {
     	int transitiveClosure = 0;
     	int matSize = 0;
@@ -136,6 +136,7 @@ public class MatrixOperator {
     	
     	catch(Exception e)
     	{
+    		System.out.println("ERROR: MatrixOperator.getBestTransitiveClosure() failure");
     		return 0;
     	}    		
     }
