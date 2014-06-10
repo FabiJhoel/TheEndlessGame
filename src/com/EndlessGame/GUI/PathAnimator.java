@@ -19,8 +19,6 @@ public class PathAnimator extends Thread{
 	private PathGraph pathGraph;
 	private boolean teletransCollision, enemiesCollision, roadWeaponCollision, bulletVehicleCollision;
 	private Node currentNode;
-	//private TextView pointsTxtView;
-	//private TextView livesNumbTxtView;
 	private PlayerInfo player;
 	private boolean stop;
 	private MediaPlayer mainSound;
@@ -303,6 +301,7 @@ public class PathAnimator extends Thread{
 			{
 				MediaPlayer sound = MediaPlayer.create(mainScreen, R.raw.choque);
 				sound.start();
+				pEnemy.setBullet(null);
 				player.setLives(player.getLives()-1);
 				// Deactivate collision
 				enemiesCollision = false;
