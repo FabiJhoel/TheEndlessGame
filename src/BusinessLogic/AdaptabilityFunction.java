@@ -3,8 +3,8 @@ package BusinessLogic;
 import java.util.ArrayList;
 
 public class AdaptabilityFunction {
-	public AdaptabilityFunction() {
-    }
+	
+	public AdaptabilityFunction() {}
     
     /*
      * The adaptability funtion select individuals with the 
@@ -13,17 +13,25 @@ public class AdaptabilityFunction {
      * the population will fit. 
     */
     public ArrayList<Integer> getPossibleParents(ArrayList<WeaponProperties> pWeaponsPopulation){
-        double laneAverage = getPopulationAverage(pWeaponsPopulation);
-        ArrayList<Integer> possibleParents = new ArrayList<>();
-        for (int index = 0; index < pWeaponsPopulation.size(); index++){
-            if (pWeaponsPopulation.get(index).getLaneAmount() >= laneAverage){
-                possibleParents.add(index);
-            }
-        }
-        return possibleParents;
+    	try
+    	{
+	        double laneAverage = getPopulationAverage(pWeaponsPopulation);
+	        ArrayList<Integer> possibleParents = new ArrayList<>();
+	        for (int index = 0; index < pWeaponsPopulation.size(); index++){
+	            if (pWeaponsPopulation.get(index).getLaneAmount() >= laneAverage){
+	                possibleParents.add(index);
+	            }
+	        }
+	        return possibleParents;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("ERROR: GeneticAlgorithmManager.getPossibleParents() failure");
+    		return null;
+    	}
     }
     
-    public double getPopulationAverage (ArrayList<WeaponProperties> pWeaponsPopulation){
+    private double getPopulationAverage (ArrayList<WeaponProperties> pWeaponsPopulation){
         double average = 0;
         for (WeaponProperties weapon: pWeaponsPopulation){
             average += weapon.getLaneAmount();

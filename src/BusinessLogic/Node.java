@@ -25,6 +25,100 @@ public class Node {
 		visited = false;
 		isReal = false;
 	}
+
+	private int assignLevel(int parentLevel)
+    {
+    	int level = parentLevel + 1;
+    	
+    	if (level <= 4)
+    		return level;
+    	
+    	else
+    		return 1;
+    }
+	 
+	 public ArrayList<Node> getAllParents()
+	 {
+		 try
+		 {
+			 ArrayList<Node> parents = new ArrayList<Node>();
+			 long currentNodeId = this.id;
+			 int currentNodeLevel = this.level;
+			 
+			 while (currentNodeLevel != 1)
+			 {
+				 currentNodeId = Math.round((double)currentNodeId/3);
+				 currentNodeLevel --;
+				 
+				 // Create parent
+				 Node parent = new Node(seedOp.getSpecificSeed(currentNodeId), currentNodeLevel, generateRandWord(), currentNodeId);
+				 parent.setVisited(true);
+				 parents.add(parent);	
+			 }
+			 		 
+			 return parents;
+		 }
+		 catch(Exception e)
+		 {
+    		System.out.println("ERROR: Node.getAllParents() failure");
+    		return null;
+		 }
+	 }
+	
+	public void generateAdjacents()
+	{
+		try
+		{
+			int numbOfChildren = seedOp.getNumbOfNextIntersections(seed, level);	
+			BigInteger childrenSeed = null; 
+			long childrenId = 0;
+			
+			// Create always 3 children (not necessarily all real)
+			for (int contChildren = -1; contChildren < 2; contChildren++)
+			{					
+				childrenSeed = seedOp.getNewSeed();
+				childrenId = 3*id + contChildren;
+				Node children = new Node(childrenSeed, assignLevel(level), generateRandWord(), childrenId);
+	
+				if (numbOfChildren != 0) // Real children
+				{
+					children.isReal = true;
+					numbOfChildren --;
+				}
+		
+				addNextArc(children);
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("ERROR: Node.generateAdjacents() failure");
+		}
+	}
+	
+	public static String generateRandWord()
+	{
+		try
+		{
+		    Random random = new Random();
+	        char[] wordArray = new char[random.nextInt(8)+3]; 
+	        
+	        for(int index = 0; index < wordArray.length; index++)
+	        {
+	            wordArray[index] = (char)('a' + random.nextInt(26));
+	        }
+	        
+	        String word = new String(wordArray);
+	        
+		    return word;    
+		}
+		catch(Exception e)
+		{
+			System.out.println("ERROR: Node.generateRandWord() failure");
+			return null;
+		}
+	}	
+	
+	//getters and setters
 	
 	public long getId()
 	{
@@ -115,78 +209,9 @@ public class Node {
 	{
 		nextArcs.add(nextArc);
 	}	
-	
-	public int assignLevel(int parentLevel)
-    {
-    	int level = parentLevel + 1;
-    	
-    	if (level <= 4)
-    		return level;
-    	
-    	else
-    		return 1;
-    }
 	 
-	 public SeedOperator getSeedOp()
+	public SeedOperator getSeedOp()
 	 {
 		 return seedOp;
 	 }
-	 
-	 public ArrayList<Node> getAllParents()
-	 {
-		 ArrayList<Node> parents = new ArrayList<Node>();
-		 long currentNodeId = this.id;
-		 int currentNodeLevel = this.level;
-		 
-		 while (currentNodeLevel != 1)
-		 {
-			 currentNodeId = Math.round((double)currentNodeId/3);
-			 currentNodeLevel --;
-			 
-			 // Create parent
-			 Node parent = new Node(seedOp.getSpecificSeed(currentNodeId), currentNodeLevel, generateRandWord(), currentNodeId);
-			 parent.setVisited(true);
-			 parents.add(parent);	
-		 }
-		 		 
-		 return parents;
-	 }
-	
-	public void generateAdjacents()
-	{
-		int numbOfChildren = seedOp.getNumbOfNextIntersections(seed, level);	
-		BigInteger childrenSeed = null; 
-		long childrenId = 0;
-		
-		// Create always 3 children (not necessarily all real)
-		for (int contChildren = -1; contChildren < 2; contChildren++)
-		{					
-			childrenSeed = seedOp.getNewSeed();
-			childrenId = 3*id + contChildren;
-			Node children = new Node(childrenSeed, assignLevel(level), generateRandWord(), childrenId);
-
-			if (numbOfChildren != 0) // Real children
-			{
-				children.isReal = true;
-				numbOfChildren --;
-			}
-	
-			addNextArc(children);
-		}
-	}
-	
-	public static String generateRandWord()
-	{
-	    Random random = new Random();
-        char[] wordArray = new char[random.nextInt(8)+3]; 
-        
-        for(int index = 0; index < wordArray.length; index++)
-        {
-            wordArray[index] = (char)('a' + random.nextInt(26));
-        }
-        
-        String word = new String(wordArray);
-        
-	    return word;    
-	}	
 }
