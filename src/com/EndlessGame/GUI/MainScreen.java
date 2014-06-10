@@ -67,5 +67,6 @@ public class MainScreen extends Activity{
 	public void shootButtonOnClick(View view)
 	{
 		pathAnimator.getBackground().getVehicle().addBullet();
+		pathAnimator.setBulletVehicleCollision(true);
 	}
 }
