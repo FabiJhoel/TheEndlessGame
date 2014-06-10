@@ -31,28 +31,43 @@ public class PathGraph {
 
 	public void loadHashVisitedNodes(Node isReturnNode)
 	{
-		visitedNodes.clear();
-		
-		// Get all parents
-		ArrayList<Node> parents = isReturnNode.getAllParents();
-		
-		// Load parents to hash table
-		for (Node visitedNode : parents)
+		try
 		{
-			if (visitedNodes.get(visitedNode.getLevel()).size() < 3)    	
-	    	{	    		
-	    		if (!findVisitedNode(visitedNode))
-		    		visitedNodes.put(visitedNode.getLevel(), visitedNode);	                  
-	    	}	    	    				
+			visitedNodes.clear();
+			
+			// Get all parents
+			ArrayList<Node> parents = isReturnNode.getAllParents();
+			
+			// Load parents to hash table
+			for (Node visitedNode : parents)
+			{
+				if (visitedNodes.get(visitedNode.getLevel()).size() < 3)    	
+		    	{	    		
+		    		if (!findVisitedNode(visitedNode))
+			    		visitedNodes.put(visitedNode.getLevel(), visitedNode);	                  
+		    	}	    	    				
+			}
 		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: PathGraph.loadHashVisitedNodes() failure");
+    	}
 	}
 
     public Node setInitialIntersection()
     {
-    	BigInteger initialSeed = BigInteger.valueOf(6);
-    	Node initialNode = new Node(initialSeed, 1, Node.generateRandWord(), 1);
-    	initialNode.setIsReal(true);
-    	return initialNode;
+    	try
+    	{
+	    	BigInteger initialSeed = BigInteger.valueOf(6);
+	    	Node initialNode = new Node(initialSeed, 1, Node.generateRandWord(), 1);
+	    	initialNode.setIsReal(true);
+	    	return initialNode;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("ERROR: PathGraph.setInitialIntersection() failure");
+    		return null;
+    	}
     }
     
     public void generateLevel(Node currentNode)
@@ -69,12 +84,12 @@ public class PathGraph {
     	
     	catch(Exception e)
     	{
-    		System.out.println("ERROR generating new level " + e.getMessage());
+    		System.out.println("ERROR PathGraph.generateLevel() failure");
     	}
     }
     
     // Establish a isReturn intersection (level 4 nodes)
-    public void setReturnPath(ArrayList<Node> paths)
+    private void setReturnPath(ArrayList<Node> paths)
     { 
     	BigInteger divisorTwo = BigInteger.valueOf(2);
     	boolean selected = false;
@@ -98,40 +113,57 @@ public class PathGraph {
     // Select a node to return from the visitedNodes Hash
     public Node selectVisitedNode(Node returnPath)
     {
-    	BigInteger divisorFive = BigInteger.valueOf(4);
-    	int remainder = returnPath.getSeed().mod(divisorFive).intValue(); // value from 0 to 3
-    	int key = remainder + 1;
-    	Node nodeToReturn = null;
+    	try
+    	{
+	    	BigInteger divisorFive = BigInteger.valueOf(4);
+	    	int remainder = returnPath.getSeed().mod(divisorFive).intValue(); // value from 0 to 3
+	    	int key = remainder + 1;
+	    	Node nodeToReturn = null;
+	    	
+	    	Collection <Node> nodes = visitedNodes.get(key);
+	    	
+	    	for (Node path : nodes) // Selects first element of the key
+	        {	        	
+	    		nodeToReturn = path;
+	    		return nodeToReturn;
+	        }   
+	    	
+	    	return nodeToReturn;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("ERROR PathGraph.selectVisitedNode() failure");
+    		return null;
+    	}
     	
-    	Collection <Node> nodes = visitedNodes.get(key);
-    	
-    	for (Node path : nodes) // Selects first element of the key
-        {	        	
-    		nodeToReturn = path;
-    		return nodeToReturn;
-        }   
-    	
-    	return nodeToReturn;
     }
     
     public Node suggestPath(ArrayList<Node> paths) //los niveles superiores a estos nodos ya deben estar cargados
     {
-    	Node bestPath = null; 	//global solution 
-    	
-    	while(!paths.isEmpty())
+    	try
     	{
-    		Node localSol = paths.get(0);  	// possible solution;	
-    		paths.remove(0);
-    		
-    		
-    		if (bestPath == null || MatrixOperator.getBestTransitiveClosure(localSol, bestPath) == 1)
-    		{
-    			bestPath = localSol;
-    		}
-    		
+	    	Node bestPath = null; 	//global solution 
+	    	
+	    	while(!paths.isEmpty())
+	    	{
+	    		Node localSol = paths.get(0);  	// possible solution;	
+	    		paths.remove(0);
+	    		
+	    		
+	    		if (bestPath == null || MatrixOperator.getBestTransitiveClosure(localSol, bestPath) == 1)
+	    		{
+	    			bestPath = localSol;
+	    		}
+	    		
+	    	}
+	    	
+	    	return bestPath;
     	}
-    	
-    	return bestPath;
+    	catch(Exception e)
+    	{
+    		System.out.println("ERROR PathGraph.suggestPath() failure");
+    		return null;
+    	}
     }
 
 }

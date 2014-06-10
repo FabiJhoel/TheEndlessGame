@@ -16,10 +16,18 @@ public class PlayerInfo {
 
 	public boolean checkLives()
 	{
-		if (lives <= 0)
-			return true;
-		else
-			return false;
+		try
+		{
+			if (lives <= 0)
+				return true;
+			else
+				return false;
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: PlayerInfo.checkLives() failure");
+    		return false;
+    	}
 	}
 	
 	//getters and setters

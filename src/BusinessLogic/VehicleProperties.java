@@ -9,7 +9,20 @@ public class VehicleProperties {
         currentWeapon = weaponAdministrator.generateDefaultWeapon();
         weaponAdministrator.addWeapon(currentWeapon);
     }
-
+    
+    public void generateWeapon(WeaponProperties foundWeapon){
+    	try
+    	{
+	        currentWeapon = weaponAdministrator.generateWeapon(foundWeapon);
+	        weaponAdministrator.addWeapon(currentWeapon);
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("ERROR: VehicleProperties.generateWeapon() failure");
+    	}
+    }
+    
+    //getters and setters
     public WeaponPopulationAdministrator getWeaponAdministrator() {
         return weaponAdministrator;
     }
@@ -24,11 +37,5 @@ public class VehicleProperties {
 
     public void setCurrentWeapon(WeaponProperties currentWeapon) {
         this.currentWeapon = currentWeapon;
-    }
-    
-    public void generateWeapon(WeaponProperties foundWeapon){
-        //supposing weaponAdministrator.generateDefaultWeapon() is the weapon found in the road
-        currentWeapon = weaponAdministrator.generateWeapon(foundWeapon);
-        weaponAdministrator.addWeapon(currentWeapon);
     }
 }
