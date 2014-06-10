@@ -5,6 +5,7 @@ import java.util.Random;
 import com.EndlessGame.GUI.R;
 
 import BusinessLogic.*;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -141,6 +142,7 @@ public class PathAnimator extends Thread{
 	{
 		background.setIntersectionNumb(currentNode.getSeed().toString());
 		background.setIntersectionName(currentNode.getName());
+		background.setVisited(currentNode.getVisited());
 		background.setBillboardAmount(1);
 		
 		try 
@@ -239,7 +241,7 @@ public class PathAnimator extends Thread{
 				
 				// Accumulate points
 				if (pathGraph.findVisitedNode(currentNode))
-					player.accumulateScore(2);
+					player.accumulateScore(1);
 				else
 					player.accumulateScore(3);	
 				
@@ -385,6 +387,9 @@ public class PathAnimator extends Thread{
 		{
 			stop = true;
 			background.setStop(true);
+			mainSound.stop();
+			mainScreen.finish();
+			mainScreen.startActivity(new Intent("com.EndlessGame.GUI.GAMEOVERSCREEN"));
 		}
 	}
 

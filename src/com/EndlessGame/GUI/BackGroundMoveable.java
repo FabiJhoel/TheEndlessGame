@@ -20,7 +20,7 @@ public class BackGroundMoveable extends View{
 	private final float leftRoadLimit = (float)(80-(80*offset))*density;
 	private Bitmap mainPath, warpPath, roadPath;
 	private int farY, nearY, speed; 
-	private boolean warp, stop;
+	private boolean warp, stop, isVisited;
 	private ArrayList<Teletransporter> teletransporters;
 	private int teletransportersAmount, roadWeaponAmount;
 	private Vehicle vehicle;
@@ -28,8 +28,7 @@ public class BackGroundMoveable extends View{
 	private int enemiesAmount;
 	private Billboard billboard;
 	private int billboardAmount;
-	private String intersectionNumb;
-	private String intersectionName;
+	private String intersectionNumb, intersectionName;
 	private Random rand = new Random();
 	private Weapon roadWeapon;
 	
@@ -51,6 +50,7 @@ public class BackGroundMoveable extends View{
 		intersectionNumb = "";
 		intersectionName = "";
 		stop = false;
+		isVisited = false;
 		roadWeapon = null;		
 	}
 	
@@ -184,7 +184,7 @@ public class BackGroundMoveable extends View{
 		if (billboardAmount == -1)
 		{	
 			if (billboard != null)
-				billboard.drawBillboard(canvas, intersectionNumb, intersectionName);
+				billboard.drawBillboard(canvas, intersectionNumb, intersectionName, isVisited);
 		}
 		
 		else
@@ -418,8 +418,14 @@ public class BackGroundMoveable extends View{
 
 	public void setRoadWeapon(Weapon roadWeapon) {
 		this.roadWeapon = roadWeapon;
+	}
+
+	public boolean isVisited() {
+		return isVisited;
+	}
+
+	public void setVisited(boolean isVisited) {
+		this.isVisited = isVisited;
 	}	
-	
-	
-	
+		
 }

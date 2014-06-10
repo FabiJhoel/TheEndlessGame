@@ -20,14 +20,14 @@ public class Billboard extends PathObject{
 		coordY = -height;
 	}
 	
-	public void drawBillboard(Canvas canvas, String intersectionNumb, String intersectionName)
+	public void drawBillboard(Canvas canvas, String intersectionNumb, String intersectionName, boolean isVisited)
 	{
 		drawPathObject(canvas);
-		drawContent(canvas, intersectionNumb, intersectionName);
+		drawContent(canvas, intersectionNumb, intersectionName, isVisited);
         coordY += speed ;
 	}
 	
-	public void drawContent(Canvas canvas, String intersectionNumb, String intersectionName)
+	public void drawContent(Canvas canvas, String intersectionNumb, String intersectionName, boolean isVisited)
 	{
 		 int adWidth = adImage.getWidth();
 		 int adHeight = adImage.getHeight();
@@ -46,6 +46,12 @@ public class Billboard extends PathObject{
 		Paint valuesPaint = new Paint();
 		valuesPaint.setColor(Color.YELLOW);
 		valuesPaint.setTextSize(calculateOffset(15));
+		
+		if (isVisited)
+		{
+			titlePaint.setColor(Color.RED);
+			valuesPaint.setColor(Color.RED);
+		}
 		
 		canvas.drawText("Intersection Number:", coordX + calculateOffset(20), coordY + calculateOffset(60), titlePaint);
 		canvas.drawText(intersectionNumb, coordX + calculateOffset(20), coordY + calculateOffset(80), valuesPaint);
