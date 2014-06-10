@@ -15,7 +15,7 @@ public class PathAnimator extends Thread{
 	private MainScreen mainScreen;
 	private BackGroundMoveable background;
 	private PathGraph pathGraph;
-	private boolean teletransCollision, enemiesCollision, roadWeaponCollision;
+	private boolean teletransCollision, enemiesCollision, roadWeaponCollision, bulletVehicleCollision;
 	private Node currentNode;
 	//private TextView pointsTxtView;
 	//private TextView livesNumbTxtView;
@@ -34,7 +34,7 @@ public class PathAnimator extends Thread{
 		
 		background = new BackGroundMoveable(mainScreen);
 		showBackground();
-		teletransCollision = enemiesCollision = roadWeaponCollision = false;
+		teletransCollision = enemiesCollision = roadWeaponCollision = bulletVehicleCollision = false;
 		stop = false;
 		
 		player = new PlayerInfo("");
@@ -54,6 +54,8 @@ public class PathAnimator extends Thread{
 				
 				if (seconds == 25)
 					activateEnemies();
+				else if (seconds == 26)
+					activateEnemiesShoots();
 				else if (seconds == 40)
 					activateWeapon();
 			}
@@ -68,6 +70,8 @@ public class PathAnimator extends Thread{
 				checkEnemiesCollision();
 			if (roadWeaponCollision)
 				checkRoadWeaponCollision();
+			if(bulletVehicleCollision)
+				checkbulletVehicleCollision();
 	
 			try 
 			{
@@ -143,6 +147,58 @@ public class PathAnimator extends Thread{
 		}
 	}
 	
+	public void activateEnemiesShoots()
+	{
+		for (Enemy enemy : background.getEnemies())
+		{
+			enemy.addBullet();
+			try 
+			{
+				Thread.sleep(500);
+			}
+			
+			catch (InterruptedException e1) 
+			{			
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	protected void checkbulletVehicleCollision()
+	{
+		boolean collition = false;
+		Vehicle vehicle = background.getVehicle();
+		Bullet bullet;
+		Enemy enemy;
+		int index = 0;
+		int index2 = 0;
+		
+		while(index < background.getEnemies().size())
+		{
+			enemy = background.getEnemies().get(index);
+			while(index2 < vehicle.getBullets().size())
+			{
+				bullet = vehicle.getBullets().get(index2);
+				collition = bullet.getCoordX() <= enemy.getCoordX() + enemy.getWidth()&&
+						bullet.getCoordX()+bullet.getWidth() >= enemy.getCoordX() && 
+								bullet.getCoordY()+bullet.getHeight() >= enemy.getCoordY() && 
+										bullet.getCoordY() <= enemy.getCoordY() + enemy.getHeight();
+				if(collition)
+				{
+					System.out.println("MATE A UNO");
+					vehicle.getBullets().remove(index2);
+					background.getEnemies().remove(index);
+					collition = false;
+					break;
+				}
+				else
+					index2++;
+			}
+			if(!collition)
+				index++;
+		}	
+	}
+	
 	protected void checkTeletransporterCollision(){
 		
 		boolean collition = false;
@@ -184,6 +240,7 @@ public class PathAnimator extends Thread{
 				teletransCollision = false;
 				
 				vehicle.getBullets().clear();
+				bulletVehicleCollision = false;
 				
 				break;
 			}
@@ -205,13 +262,40 @@ public class PathAnimator extends Thread{
 			if(collition)
 			{				
 				player.setLives(player.getLives()-1);
-				System.out.println("VIDAS RESTANTES: "+player.getLives());
 				// Deactivate collision
 				enemiesCollision = false;
 				checkLives();
 				break;
 			}
+			else if(checkbulletEnemieCollision(enemy))
+				break;
 		}	
+	}
+	
+	protected boolean checkbulletEnemieCollision(Enemy pEnemy)
+	{
+		boolean collition = false;
+		Vehicle vehicle = background.getVehicle();
+		Bullet bullet = pEnemy.getBullet();
+
+		if (bullet != null)
+		{
+			collition = bullet.getCoordX() <= vehicle.getCoordX() + vehicle.getWidth()&&
+					bullet.getCoordX()+bullet.getWidth() >= vehicle.getCoordX() && 
+							bullet.getCoordY()+bullet.getHeight() >= vehicle.getCoordY() && 
+									bullet.getCoordY() <= vehicle.getCoordY() + vehicle.getHeight();
+			if(collition)
+			{
+				player.setLives(player.getLives()-1);
+				// Deactivate collision
+				enemiesCollision = false;
+				checkLives();
+				return true;
+			}
+		}
+		
+		return false;
+
 	}
 	
 	public void checkRoadWeaponCollision()
@@ -296,4 +380,15 @@ public class PathAnimator extends Thread{
 	public void setBackground(BackGroundMoveable background) {
 		this.background = background;
 	}
+
+	
+	public boolean isBulletVehicleCollision() {
+		return bulletVehicleCollision;
+	}
+
+	public void setBulletVehicleCollision(boolean bulletVehicleCollision) {
+		this.bulletVehicleCollision = bulletVehicleCollision;
+	}
+
+	
 }

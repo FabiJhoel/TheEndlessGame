@@ -243,8 +243,6 @@ public class BackGroundMoveable extends View{
 	
 	public void clearTeletransporters()
 	{
-		//setTeletransportersAmount(-1);
-
 		for (int index = teletransporters.size()-1; index >= 0; index--){
 			teletransporters.remove(index);
 		}

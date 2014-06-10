@@ -10,6 +10,7 @@ public class Enemy extends PathObject{
 	private static int leftRoadLimit = -1;
 	private float laneWidth;
 	private static int topRoadLimit = -108;
+	private Bullet bullet;
 	
 	
 	public Enemy(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed)
@@ -19,7 +20,8 @@ public class Enemy extends PathObject{
         //System.out.println("Density: "+density);
         laneWidth = (float)(115-(115*offset))*density;
         leftRoadLimit = (int)((105-(105*offset))*density);
-        //System.out.println("LRL: "+leftRoadLimit);
+
+        bullet = null;
         
 		coordX = chooseLane();
 		coordY = topRoadLimit;
@@ -30,7 +32,17 @@ public class Enemy extends PathObject{
 	public void drawEnemy(Canvas canvas)
 	{
 		drawPathObject(canvas);
-        coordY += (speed + speed/4) ;
+        coordY += (speed + speed/8) ;
+        if(bullet != null)
+        	bullet.drawBullet(canvas);
+	}
+	
+	protected void addBullet()
+	{
+		bullet = new Bullet(background,null,speed,false,1);
+		//AGREGAR X Y Y DE LAS BALAS AQUI
+		bullet.setCoordY(coordY+height);
+		bullet.setCoordX(coordX+width/2);
 	}
 	
 	private int chooseLane()
@@ -48,6 +60,8 @@ public class Enemy extends PathObject{
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
+		if(bullet != null)
+			bullet.setSpeed(speed);
 	}
 	
 	public static int getLeftRoadLimit() {
@@ -65,6 +79,14 @@ public class Enemy extends PathObject{
 	public static void setTopRoadLimit(int topRoadLimit) {
 		Enemy.topRoadLimit = topRoadLimit;
 	}
-	
 
+	public Bullet getBullet() {
+		return bullet;
+	}
+
+	public void setBullet(Bullet bullet) {
+		this.bullet = bullet;
+	}
+	
+	
 }

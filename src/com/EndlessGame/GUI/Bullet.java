@@ -19,7 +19,10 @@ public class Bullet extends PathObject{
 	public void drawBullet (Canvas canvas)
 	{
 		drawPathObject(canvas);
-		coordY -= (speed + speed/4) ;
+		if (type)
+			coordY -= (speed + speed/4);
+		else
+			coordY += (speed + speed/2);
 	}
 	
 	@Override

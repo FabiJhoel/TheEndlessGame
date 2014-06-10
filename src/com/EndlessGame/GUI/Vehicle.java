@@ -18,7 +18,7 @@ public class Vehicle extends PathObject{
 		vehicle = new VehicleProperties();
 		currentWeapon = new Weapon(background,0,vehicle.getCurrentWeapon(),true);
 		coordX = (int)((340-(340*offset))*density); 
-		coordY = (int)((380-(380*offset))*density);
+		coordY = (int)((420-(420*offset))*density);
 		currentWeapon.setCoordX(coordX+width);
 		currentWeapon.setCoordY(coordY);
 		bullets = new ArrayList<>();
@@ -42,15 +42,14 @@ public class Vehicle extends PathObject{
 			{
 				bullet = new Bullet(background,null,speed,true,scope);
 				//AGREGAR X Y Y DE LAS BALAS AQUI
-				bullet.setCoordY(coordY+bullet.getHeight());
+				bullet.setCoordY(coordY+bullet.getHeight()/4);
 				if(scope == 1)
-					bullet.setCoordX(coordX+width/2);
+					bullet.setCoordX(coordX);
 				else
 				{
-					bullet.setCoordX((int)(coordX+(laneWidth*cont)+width/2));
+					bullet.setCoordX((int)(coordX+(laneWidth*cont)));
 				}
 				bullets.add(bullet);
-				System.out.println("AgregueArma");
 			}
 		}
 	}
