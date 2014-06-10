@@ -13,7 +13,8 @@ public class Vehicle extends PathObject{
 	private ArrayList<Bullet> bullets;
 	private float laneWidth;
 	
-	public Vehicle(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed) {
+	public Vehicle(BackGroundMoveable pBackground, Bitmap pImage, int pSpeed) 
+	{
 		super(pBackground, pImage, pSpeed);
 		vehicle = new VehicleProperties();
 		currentWeapon = new Weapon(background,0,vehicle.getCurrentWeapon(),true);
@@ -25,40 +26,61 @@ public class Vehicle extends PathObject{
 		laneWidth = (float)(115-(115*offset))*density;
 	}
 
-	protected void drawVehicle(Canvas canvas) {
-		drawPathObject(canvas);
-		currentWeapon.drawWeapon(canvas);
-		for (Bullet bullet : bullets)
-			bullet.drawBullet(canvas);
+	public void drawVehicle(Canvas canvas) {
+		try
+		{
+			drawPathObject(canvas);
+			currentWeapon.drawWeapon(canvas);
+			for (Bullet bullet : bullets)
+				bullet.drawBullet(canvas);
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Vehicle.drawVehicle() failure");
+    	}
 	}
 	
 	protected void addBullet()
 	{
-		int scope = currentWeapon.getWeapon().getLaneAmount();
-		Bullet bullet;
-		if(bullets.size() < 2*scope)
+		try
 		{
-			for (int cont = -1; cont < scope-1; cont++)
+			int scope = currentWeapon.getWeapon().getLaneAmount();
+			Bullet bullet;
+			if(bullets.size() < 2*scope)
 			{
-				bullet = new Bullet(background,null,speed,true,scope);
-				//AGREGAR X Y Y DE LAS BALAS AQUI
-				bullet.setCoordY(coordY+bullet.getHeight()/4);
-				if(scope == 1)
-					bullet.setCoordX(coordX);
-				else
+				for (int cont = -1; cont < scope-1; cont++)
 				{
-					bullet.setCoordX((int)(coordX+(laneWidth*cont)));
+					bullet = new Bullet(background,null,speed,true,scope);
+					//AGREGAR X Y Y DE LAS BALAS AQUI
+					bullet.setCoordY(coordY+bullet.getHeight()/4);
+					if(scope == 1)
+						bullet.setCoordX(coordX);
+					else
+					{
+						bullet.setCoordX((int)(coordX+(laneWidth*cont)));
+					}
+					bullets.add(bullet);
 				}
-				bullets.add(bullet);
 			}
 		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Vehicle.addBullet() failure");
+    	}
 	}
 
 	public void setNewWeapon()
 	{
-		currentWeapon = new Weapon(background,0,vehicle.getCurrentWeapon(),true);
-		currentWeapon.setCoordX(coordX+width);
-		currentWeapon.setCoordY(coordY);
+		try
+		{
+			currentWeapon = new Weapon(background,0,vehicle.getCurrentWeapon(),true);
+			currentWeapon.setCoordX(coordX+width);
+			currentWeapon.setCoordY(coordY);
+		}
+		catch(Exception e)
+    	{
+    		System.out.println("ERROR: Vehicle.setNewWeapon() failure");
+    	}
 	}
 	
 	//getters and setters

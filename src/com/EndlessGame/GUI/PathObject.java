@@ -29,7 +29,8 @@ public abstract class PathObject {
 		density = background.getResources().getDisplayMetrics().density;
 	}
 
-	protected void drawPathObject(Canvas canvas){
+	protected void drawPathObject(Canvas canvas)
+	{
 		Rect src = new Rect(0, 0, width, height);
         Rect dst = new Rect(coordX, coordY, coordX+width, coordY+height);
         canvas.drawBitmap(image, src, dst, null);
