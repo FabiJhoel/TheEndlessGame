@@ -10,7 +10,8 @@ public class WeaponProperties {
     private int[] color; //RGB
 
     public WeaponProperties(byte pThicknessByteRepresentacion, byte pPolygonPointsByteRepresentacion, 
-            byte pLaneAmountByteRepresentation, int[] pColor) {
+            byte pLaneAmountByteRepresentation, int[] pColor) 
+    {
         this.thicknessByteRepresentacion = pThicknessByteRepresentacion;
         this.polygonPointsByteRepresentacion = pPolygonPointsByteRepresentacion;
         this.color = pColor;
