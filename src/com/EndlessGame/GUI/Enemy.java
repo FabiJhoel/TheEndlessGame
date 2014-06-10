@@ -51,7 +51,7 @@ public class Enemy extends PathObject{
 			bullet = new Bullet(background,null,speed,false,1);
 			//AGREGAR X Y Y DE LAS BALAS AQUI
 			bullet.setCoordY(coordY+height);
-			bullet.setCoordX(coordX+width/2);
+			bullet.setCoordX(coordX);
 		}
 		catch(Exception e)
     	{
