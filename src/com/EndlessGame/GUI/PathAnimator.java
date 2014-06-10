@@ -142,7 +142,7 @@ public class PathAnimator extends Thread{
 	{
 		background.setIntersectionNumb(currentNode.getSeed().toString());
 		background.setIntersectionName(currentNode.getName());
-		background.setVisited(currentNode.getVisited());
+		background.setVisited(pathGraph.findVisitedNode(currentNode));
 		background.setBillboardAmount(1);
 		
 		try 
