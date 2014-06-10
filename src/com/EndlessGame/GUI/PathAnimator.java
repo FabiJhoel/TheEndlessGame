@@ -28,26 +28,23 @@ public class PathAnimator extends Thread{
 	
 	public PathAnimator(MainScreen pMainScreen)
 	{				
-		this.mainScreen = pMainScreen;
-		this.speed = seconds = 0;
-		
+		player = new PlayerInfo("");
 		pathGraph = new PathGraph();
 		currentNode = pathGraph.setInitialIntersection();
 		pathGraph.generateLevel(currentNode);
-		
+		this.mainScreen = pMainScreen;
+		this.speed = seconds = 0;
 		mainSound = MediaPlayer.create(mainScreen, R.raw.main_screen_theme);
 		mainSound.setLooping(true);
-		mainSound.setVolume((float)0.3, (float)0.3);
-		
+		mainSound.setVolume((float)0.3, (float)0.3);	
 		background = new BackGroundMoveable(mainScreen);
 		showBackground();
 		teletransCollision = enemiesCollision = roadWeaponCollision = bulletVehicleCollision = false;
-		stop = false;
-		
-		player = new PlayerInfo("");
+		stop = false;		
 	}
 	
-	public PlayerInfo getPlayer() {
+	public PlayerInfo getPlayer()
+	{
 		return player;
 	}
 
@@ -94,7 +91,7 @@ public class PathAnimator extends Thread{
 		}
 	}
 	
-	public void increaseSpeed(){
+	private void increaseSpeed(){
 		if(speed < 7)
 		{
 			speed++;
@@ -112,7 +109,7 @@ public class PathAnimator extends Thread{
 		}	
 	}
 	
-	public void activateEnemies()
+	private void activateEnemies()
 	{              
         Random randomGenerator = new Random();
         int enemiesNumb = randomGenerator.nextInt(3) +1;
@@ -122,7 +119,7 @@ public class PathAnimator extends Thread{
 		enemiesCollision = true;
 	}
 	
-	public void activateWeapon()
+	private void activateWeapon()
 	{
 		background.setRoadWeaponAmount(1);
 		
@@ -130,7 +127,7 @@ public class PathAnimator extends Thread{
 		roadWeaponCollision = true;
 	}
 	
-	public void activateTeletransporters()
+	private void activateTeletransporters()
 	{
 		activateBillboard();
 		background.setTeletransportersAmount(currentNode.getRealArcs().size()); 
@@ -138,7 +135,7 @@ public class PathAnimator extends Thread{
 		teletransCollision = true;
 	}
 	
-	public void activateBillboard()
+	private void activateBillboard()
 	{
 		background.setIntersectionNumb(currentNode.getSeed().toString());
 		background.setIntersectionName(currentNode.getName());
@@ -155,7 +152,7 @@ public class PathAnimator extends Thread{
 		}
 	}
 	
-	public void activateEnemiesShoots()
+	private void activateEnemiesShoots()
 	{
 		for (Enemy enemy : background.getEnemies())
 		{
@@ -163,6 +160,7 @@ public class PathAnimator extends Thread{
 			MediaPlayer sound = MediaPlayer.create(mainScreen, R.raw.disparo_malo);
 			sound.setVolume((float)0.3, (float)0.3);
 			sound.start();
+			
 			try 
 			{
 				Thread.sleep(500);
@@ -175,7 +173,7 @@ public class PathAnimator extends Thread{
 		}
 	}
 	
-	protected void checkbulletVehicleCollision()
+	private void checkbulletVehicleCollision()
 	{
 		boolean collition = false;
 		Vehicle vehicle = background.getVehicle();
@@ -202,15 +200,17 @@ public class PathAnimator extends Thread{
 					collition = false;
 					break;
 				}
+				
 				else
 					index2++;
 			}
+			
 			if(!collition)
 				index++;
 		}	
 	}
 	
-	protected void checkTeletransporterCollision(){
+	private void checkTeletransporterCollision(){
 		
 		boolean collition = false;
 		Vehicle vehicle = background.getVehicle();
@@ -259,7 +259,7 @@ public class PathAnimator extends Thread{
 		}		
 	}
 
-	protected void checkEnemiesCollision()
+	private void checkEnemiesCollision()
 	{
 		boolean collition = false;
 		Vehicle vehicle = background.getVehicle();
@@ -281,12 +281,13 @@ public class PathAnimator extends Thread{
 				checkLives();
 				break;
 			}
+			
 			else if(checkbulletEnemieCollision(enemy))
 				break;
 		}	
 	}
 	
-	protected boolean checkbulletEnemieCollision(Enemy pEnemy)
+	private boolean checkbulletEnemieCollision(Enemy pEnemy)
 	{
 		boolean collition = false;
 		Vehicle vehicle = background.getVehicle();
@@ -311,10 +312,9 @@ public class PathAnimator extends Thread{
 		}
 		
 		return false;
-
 	}
 	
-	public void checkRoadWeaponCollision()
+	private void checkRoadWeaponCollision()
 	{
 		boolean collition = false;
 		Vehicle vehicle = background.getVehicle();
@@ -338,27 +338,30 @@ public class PathAnimator extends Thread{
 		}
 	}
 	
-	protected void teletransport(){
+	private void teletransport()
+	{
 		int warpSpeed = 40;
 		background.setWarp(true);
 		background.setMainPath(background.getWarpPath());
 		background.setSpeed(warpSpeed);
 		background.setTeletransportersAmount(0);
 		background.setBillboardAmount(0);
-		/*background.clearBillboard();
-		background.clearTeletransporters();*/
-		try {
+	
+		try 
+		{
 			Thread.sleep(800);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (InterruptedException e) 
+		{
 			e.printStackTrace();
 		}
+		
 		background.setWarp(false);
 		background.setSpeed(speed);
 		background.setMainPath(background.getRoadPath());
 	}
 	
-	protected void showBackground()
+	private void showBackground()
 	{
 		RelativeLayout surface = (RelativeLayout)mainScreen.findViewById(R.id.mainLayout);
 		surface.addView(background);
@@ -381,7 +384,7 @@ public class PathAnimator extends Thread{
 		mainSound.start();
 	}
 	
-	protected void checkLives()
+	private void checkLives()
 	{
 		if (player.checkLives())
 		{
