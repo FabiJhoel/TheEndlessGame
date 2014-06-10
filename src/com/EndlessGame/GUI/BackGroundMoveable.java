@@ -23,17 +23,17 @@ public class BackGroundMoveable extends View{
 	private Weapon roadWeapon;
 	private String intersectionNumb, intersectionName;
 	private Random rand = new Random();
-	private int farY, nearY, speed; 
+	private int farY, nearY, newFarY, speed; 
 	private int enemiesAmount, billboardAmount, teletransportersAmount, roadWeaponAmount;
 	private boolean warp, stop, isVisited;
 	private final float offset = (float)0.3478260869;
 	private final float density = getResources().getDisplayMetrics().density;
 	private final float leftRoadLimit = (float)(80-(80*offset))*density;
 		
-	public BackGroundMoveable(Context context) {
-		
+	public BackGroundMoveable(Context context)
+	{	
 		super(context);
-		farY = nearY = speed = 0;
+		farY = nearY = newFarY = speed = 0;
 		warp = stop = isVisited = false;
 		intersectionNumb = "";
 		intersectionName = "";
@@ -52,6 +52,23 @@ public class BackGroundMoveable extends View{
 		// TODO Auto-generated method stub
 		super.onDraw(canvas);
 		
+		update(canvas);
+		
+		if (warp == false)
+		{
+			drawBillboard(canvas);
+			drawTeletransporters(canvas);
+			drawVehicle(canvas);
+			drawEnemy(canvas);
+			drawRoadWeapon(canvas);
+		}
+		
+		if(!stop)
+			invalidate();
+	}
+	
+	private void update(Canvas canvas)
+	{
 		//http://androidtrainningcenter.blogspot.com/2012/12/android-game-development-moving-or.html
 		int offset1 = 1;
 		int offset2 = 2;
@@ -62,7 +79,7 @@ public class BackGroundMoveable extends View{
 		// decrement the near background
 		nearY = nearY + offset2 + speed;
 		// calculate the wrap factor for matching image draw
-		int newFarY = (farY)-mainPath.getHeight();
+		newFarY = (farY)-mainPath.getHeight();
 		// if we have scrolled all the way, reset to start
 		if (newFarY > 0) 
 		{
@@ -76,18 +93,6 @@ public class BackGroundMoveable extends View{
 			canvas.drawBitmap(mainPath, 0, farY, null);
 			canvas.drawBitmap(mainPath, 0, newFarY, null);
 		}
-		
-		if (warp == false)
-		{
-			drawBillboard(canvas);
-			drawTeletransporters(canvas);
-			drawVehicle(canvas);
-			drawEnemy(canvas);
-			drawRoadWeapon(canvas);
-		}
-		
-		if(!stop)
-			invalidate();
 	}
 	
 	@Override
@@ -136,10 +141,9 @@ public class BackGroundMoveable extends View{
 				teletranspoter.setSpeed(speed);
 			}
 		}
-		
 		else
 		{
-			clearTeletransporters();
+			teletransporters.clear();
 			addTeletransporters();
 			teletransportersAmount = -1;	
 		}
@@ -195,7 +199,7 @@ public class BackGroundMoveable extends View{
 		
 		else
 		{
-			clearEnemies();
+			enemies.clear();
 			addEnemies();
 			enemiesAmount = -1;		
 		}
@@ -222,13 +226,6 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	private void clearTeletransporters()
-	{
-		for (int index = teletransporters.size()-1; index >= 0; index--){
-			teletransporters.remove(index);
-		}
-	}
-	
 	private void addEnemies()
 	{
 		switch(enemiesAmount)
@@ -248,14 +245,6 @@ public class BackGroundMoveable extends View{
 			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
 			Enemy.setTopRoadLimit(-108);
 			break;
-		}
-	}
-	
-	private void clearEnemies()
-	{
-		for (int index = enemies.size()-1; index >= 0; index--)
-		{
-			enemies.remove(index);
 		}
 	}
 	
