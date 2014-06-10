@@ -15,65 +15,38 @@ import android.view.View;
 
 public class BackGroundMoveable extends View{
 
+	private Bitmap mainPath, warpPath, roadPath;
+	private ArrayList<Teletransporter> teletransporters;
+	private ArrayList<Enemy> enemies;
+	private Vehicle vehicle;
+	private Billboard billboard;
+	private Weapon roadWeapon;
+	private String intersectionNumb, intersectionName;
+	private Random rand = new Random();
+	private int farY, nearY, speed; 
+	private int enemiesAmount, billboardAmount, teletransportersAmount, roadWeaponAmount;
+	private boolean warp, stop, isVisited;
 	private final float offset = (float)0.3478260869;
 	private final float density = getResources().getDisplayMetrics().density;
 	private final float leftRoadLimit = (float)(80-(80*offset))*density;
-	private Bitmap mainPath, warpPath, roadPath;
-	private int farY, nearY, speed; 
-	private boolean warp, stop, isVisited;
-	private ArrayList<Teletransporter> teletransporters;
-	private int teletransportersAmount, roadWeaponAmount;
-	private Vehicle vehicle;
-	private ArrayList<Enemy> enemies;
-	private int enemiesAmount;
-	private Billboard billboard;
-	private int billboardAmount;
-	private String intersectionNumb, intersectionName;
-	private Random rand = new Random();
-	private Weapon roadWeapon;
-	
-	public BackGroundMoveable(Context context) {
-		super(context);
-		// TODO Auto-generated constructor stub
 		
-		mainPath = roadPath = BitmapFactory.decodeResource(getResources(), R.drawable.main_path);
-		warpPath = BitmapFactory.decodeResource(getResources(), R.drawable.warp2);
+	public BackGroundMoveable(Context context) {
+		
+		super(context);
 		farY = nearY = speed = 0;
-		warp = false;
-		teletransporters = new ArrayList<>();
-		teletransportersAmount = -1;
-		vehicle = new Vehicle(this, BitmapFactory.decodeResource(getResources(), R.drawable.car3),speed);
-		enemies = new ArrayList<>();
-		enemiesAmount = -1;
-		billboard = null;
-		billboardAmount = roadWeaponAmount = -1;
+		warp = stop = isVisited = false;
 		intersectionNumb = "";
 		intersectionName = "";
-		stop = false;
-		isVisited = false;
+		billboard = null;
 		roadWeapon = null;		
+		teletransporters = new ArrayList<>();
+		enemies = new ArrayList<>();
+		teletransportersAmount = enemiesAmount = billboardAmount = roadWeaponAmount = -1;
+		vehicle = new Vehicle(this, BitmapFactory.decodeResource(getResources(), R.drawable.car3),speed);
+		mainPath = roadPath = BitmapFactory.decodeResource(getResources(), R.drawable.main_path);
+		warpPath = BitmapFactory.decodeResource(getResources(), R.drawable.warp2);
 	}
 	
-	public String getIntersectionNumb() 
-	{
-		return intersectionNumb;
-	}
-
-	public void setIntersectionNumb(String intersectionNumb)
-	{
-		this.intersectionNumb = intersectionNumb;
-	}
-
-	public String getIntersectionName()
-	{
-		return intersectionName;
-	}
-
-	public void setIntersectionName(String intersectionName)
-	{
-		this.intersectionName = intersectionName;
-	}
-
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
@@ -91,17 +64,21 @@ public class BackGroundMoveable extends View{
 		// calculate the wrap factor for matching image draw
 		int newFarY = (farY)-mainPath.getHeight();
 		// if we have scrolled all the way, reset to start
-		if (newFarY > 0) {
-				farY = 0;
-				// only need one draw
-				canvas.drawBitmap(mainPath, 0, farY, null);
-		} else {
-				// need to draw original and wrap
-				canvas.drawBitmap(mainPath, 0, farY, null);
-				canvas.drawBitmap(mainPath, 0, newFarY, null);
+		if (newFarY > 0) 
+		{
+			farY = 0;
+			// only need one draw
+			canvas.drawBitmap(mainPath, 0, farY, null);
+		} 
+		else 
+		{
+			// need to draw original and wrap
+			canvas.drawBitmap(mainPath, 0, farY, null);
+			canvas.drawBitmap(mainPath, 0, newFarY, null);
 		}
 		
-		if (warp == false){
+		if (warp == false)
+		{
 			drawBillboard(canvas);
 			drawTeletransporters(canvas);
 			drawVehicle(canvas);
@@ -115,8 +92,6 @@ public class BackGroundMoveable extends View{
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-		//return super.onTouchEvent(event);
 		
 		int eventId = event.getAction();
 		float coordX = event.getX();
@@ -124,28 +99,34 @@ public class BackGroundMoveable extends View{
 		float rigthPathLimit = (float)(650-(650*offset))*density;
 		float leftPathLimit = (float)(80-(80*offset))*density;
 		
-		switch(eventId){
+		switch(eventId)
+		{
 			case MotionEvent.ACTION_DOWN: //this motion event prevents undesirable touches
-				if(coordX > vehicle.getCoordX()){
+				if(coordX > vehicle.getCoordX())
+				{
 					if((vehicle.getCoordX()+laneWidth)<=rigthPathLimit)
 					{
 						vehicle.setCoordX((int)(vehicle.getCoordX()+laneWidth));
 						vehicle.getCurrentWeapon().setCoordX(vehicle.getCoordX()+vehicle.getWidth());
 					}
 				}
-				else if(coordX < vehicle.getCoordX()){
+				
+				else if(coordX < vehicle.getCoordX())
+				{
 					if ((vehicle.getCoordX()-laneWidth) >= leftPathLimit)
 					{
 						vehicle.setCoordX((int)(vehicle.getCoordX()-laneWidth));
 						vehicle.getCurrentWeapon().setCoordX(vehicle.getCoordX()+vehicle.getWidth());
 					}
 				}
+				
 				break;
 		}
+		
 		return true;
 	}
 
-	protected void drawTeletransporters(Canvas canvas){
+	private void drawTeletransporters(Canvas canvas){
 		
 		if (teletransportersAmount == -1)
 		{	
@@ -164,7 +145,7 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	protected void drawRoadWeapon(Canvas canvas){
+	private void drawRoadWeapon(Canvas canvas){
 		
 		if (roadWeaponAmount == -1)
 		{	
@@ -179,7 +160,7 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	protected void drawBillboard(Canvas canvas)
+	private void drawBillboard(Canvas canvas)
 	{			
 		if (billboardAmount == -1)
 		{	
@@ -195,7 +176,7 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	protected void drawVehicle(Canvas canvas)
+	private void drawVehicle(Canvas canvas)
 	{
 		vehicle.drawVehicle(canvas);
 		vehicle.setSpeed(speed);
@@ -220,7 +201,7 @@ public class BackGroundMoveable extends View{
 		}
 	}
 
-	public void addTeletransporters()
+	private void addTeletransporters()
 	{
 		switch(teletransportersAmount){
 		case 1:
@@ -241,46 +222,44 @@ public class BackGroundMoveable extends View{
 		}
 	}
 	
-	public void clearTeletransporters()
+	private void clearTeletransporters()
 	{
 		for (int index = teletransporters.size()-1; index >= 0; index--){
 			teletransporters.remove(index);
 		}
 	}
 	
-	public void addEnemies()
+	private void addEnemies()
 	{
 		switch(enemiesAmount)
 		{		
 		case 1:
 			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			//Enemy.setLeftRoadLimit(220);
 			Enemy.setTopRoadLimit(-108);
 			break;
 		case 2:
 			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
 			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			//Enemy.setLeftRoadLimit(220);
 			Enemy.setTopRoadLimit(-108);
 			break;
 		case 3:
 			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
 			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
 			enemies.add(new Enemy(this,BitmapFactory.decodeResource(getResources(), R.drawable.spaceship),speed));
-			//Enemy.setLeftRoadLimit(220);
 			Enemy.setTopRoadLimit(-108);
 			break;
 		}
 	}
 	
-	public void clearEnemies()
+	private void clearEnemies()
 	{
-		for (int index = enemies.size()-1; index >= 0; index--){
+		for (int index = enemies.size()-1; index >= 0; index--)
+		{
 			enemies.remove(index);
 		}
 	}
 	
-	public void addNewBillboard()
+	private void addNewBillboard()
 	{
 		if (billboardAmount == 1)
 		{
@@ -290,7 +269,6 @@ public class BackGroundMoveable extends View{
 			adImages_array.recycle();
 			
 			billboard = new Billboard(this, BitmapFactory.decodeResource(getResources(), R.drawable.billboard), speed, adImage);
-		
 		}
 	}
 	
@@ -427,5 +405,24 @@ public class BackGroundMoveable extends View{
 	public void setVisited(boolean isVisited) {
 		this.isVisited = isVisited;
 	}	
-		
+	
+	public String getIntersectionNumb() 
+	{
+		return intersectionNumb;
+	}
+
+	public void setIntersectionNumb(String intersectionNumb)
+	{
+		this.intersectionNumb = intersectionNumb;
+	}
+
+	public String getIntersectionName()
+	{
+		return intersectionName;
+	}
+
+	public void setIntersectionName(String intersectionName)
+	{
+		this.intersectionName = intersectionName;
+	}	
 }
