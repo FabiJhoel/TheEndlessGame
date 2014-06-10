@@ -13,15 +13,11 @@ public class GeneticAlgorithmManager {
     public WeaponProperties createNewGeneration(WeaponProperties pParentA, ArrayList<WeaponProperties> pWeaponsPopulation){ //here the algorithm crosses parents
         WeaponProperties parentB = selectParent(pWeaponsPopulation);
 
-        System.out.println("\n\nPARENTA: "+ pParentA.toString()+"\n");
-        System.out.println("\nPARENTB: "+ parentB.toString()+"\n");
-        
         /*Mating Color*/
         int[] newColor = new int[3];
         for (int index = 0; index < 3; index++){
             newColor[index] = (crossChromosomes((byte)(pParentA.getColor()[index]), 
                                                (byte)(parentB.getColor()[index])) & (0xff));
-            //System.out.println(index+": "+Integer.toBinaryString(newColor[index]));
         }
  
         /*Mating Thickness*/
@@ -73,11 +69,9 @@ public class GeneticAlgorithmManager {
     }
     
     public byte generateMasquerade(int pSize, boolean shift){
-        //System.out.println("SIZE: "+pSize);
         int masquerade = 0b00000000;
         for (int counter = 0; counter < pSize; counter++){
             masquerade = (masquerade | (int)Math.pow(2, counter));
-            //System.out.println("Count: "+ counter + "MASQAUX: "+masquerade);
         }
         if (shift)
             masquerade = masquerade<<(8-pSize);

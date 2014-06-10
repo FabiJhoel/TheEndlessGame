@@ -28,17 +28,6 @@ public class MatrixOperator {
             }
         }
         
-    /*  //print MAT
-      		for (int iIndex = 0; iIndex < size; iIndex ++)
-      		{
-      			for (int jIndex = 0; jIndex < size; jIndex ++)
-          		{
-      				if (transitiveMat[iIndex][jIndex] == true)
-      				System.out.print("( " + iIndex +" , "+ jIndex + " )");
-          		}
-      			System.out.println("");
-      		}*/
-        
     	return transitiveMat;
     }
 	
@@ -64,18 +53,6 @@ public class MatrixOperator {
     			}
     		}
 		}
-		
-		/*//print MAT
-		for (int iIndex = 0; iIndex < size; iIndex ++)
-		{
-			for (int jIndex = 0; jIndex < size; jIndex ++)
-    		{
-				if (adjMat[iIndex][jIndex] == true)
-				System.out.print("( " + iIndex +" , "+ jIndex + " )");
-    		}
-			System.out.println("");
-		}
-		*/
 		
 		return adjMat;
     }

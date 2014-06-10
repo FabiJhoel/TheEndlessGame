@@ -183,6 +183,8 @@ public class PathAnimator extends Thread{
 				// Activate collision
 				teletransCollision = false;
 				
+				vehicle.getBullets().clear();
+				
 				break;
 			}
 		}		
@@ -286,5 +288,12 @@ public class PathAnimator extends Thread{
 		}
 	}
 
+	//getters and setters
+	public BackGroundMoveable getBackground() {
+		return background;
+	}
 
+	public void setBackground(BackGroundMoveable background) {
+		this.background = background;
+	}
 }

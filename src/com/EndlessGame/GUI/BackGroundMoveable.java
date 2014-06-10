@@ -43,7 +43,7 @@ public class BackGroundMoveable extends View{
 		warp = false;
 		teletransporters = new ArrayList<>();
 		teletransportersAmount = -1;
-		vehicle = new Vehicle(this, BitmapFactory.decodeResource(getResources(), R.drawable.car3));
+		vehicle = new Vehicle(this, BitmapFactory.decodeResource(getResources(), R.drawable.car3),speed);
 		enemies = new ArrayList<>();
 		enemiesAmount = -1;
 		billboard = null;
@@ -198,6 +198,7 @@ public class BackGroundMoveable extends View{
 	protected void drawVehicle(Canvas canvas)
 	{
 		vehicle.drawVehicle(canvas);
+		vehicle.setSpeed(speed);
 	}
 	
 	private void drawEnemy(Canvas canvas)
